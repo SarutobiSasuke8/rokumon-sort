@@ -1,0 +1,27 @@
+{
+  "id": "rokumon-sort",
+  "slug": "rokumon-sort",
+  "title": "Rokumon Sort",
+  "name": "Rokumon Sort",
+  "description": "Pour forge pigments into crystal vials until every tube is a single sealed colour.",
+  "version": "1.0.0",
+  "entry": "index.html",
+  "category": "puzzle",
+  "genre": "colour-sort",
+  "players": 1,
+  "orientation": "portrait",
+  "offline": true,
+  "modes": ["campaign", "endless"],
+  "scoring": {
+    "direction": "higher",
+    "campaign": "Sum of best level scores. Each clear is stars × 500 plus a par bonus.",
+    "endless": "Cumulative Night Pour run score. Higher is better."
+  },
+  "events": ["ready", "level_start", "level_complete", "endless_stage", "hint_used", "game_over"],
+  "hub": {
+    "ready": "Hub.ready",
+    "score": "Hub.score",
+    "event": "Hub.event",
+    "gameOver": "Hub.gameOver"
+  }
+}

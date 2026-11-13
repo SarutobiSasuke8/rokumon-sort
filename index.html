@@ -7,12 +7,9 @@
 <meta name="description" content="Pour forge pigments into crystal vials until every colour is sealed. A Rokumon puzzle.">
 <title>Rokumon Sort</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23100e0c'/%3E%3Crect x='11' y='6' width='10' height='4' rx='1' fill='%23e0a24a'/%3E%3Crect x='8' y='10' width='16' height='16' rx='4' fill='none' stroke='%23f3eadb' stroke-width='1.5'/%3E%3Crect x='10' y='16' width='12' height='8' fill='%23E23B3B'/%3E%3C/svg%3E">
-<style>html,body{margin:0;height:100%;background:#100e0c;color:#f3eadb}#app{min-height:100dvh;height:100dvh}</style>
-</head>
-<body>
-<div id="app"></div>
-<script>
-(function(){function e(e){return e.map(e=>e.slice())}function t(e){return e.length===4&&e.every(t=>t===e[0])}function n(e){return e.every(e=>e.length===0||t(e))}function r(e){if(e.length===0)return null;let t=e[e.length-1],n=1;for(let r=e.length-2;r>=0&&e[r]===t;--r)n+=1;return{color:t,count:n}}function i(e,n,i){if(n===i||n<0||i<0||n>=e.length||i>=e.length)return null;let a=e[n],o=e[i];if(!a||!o||a.length===0||t(a)||o.length>=4)return null;let s=r(a);if(!s||o.length>0&&o[o.length-1]!==s.color)return null;let c=Math.min(s.count,4-o.length);return c<=0?null:{from:n,to:i,amount:c,color:s.color}}function a(t,n){let r=e(t),i=r[n.from],a=r[n.to];if(!i||!a)return r;let o=i.splice(i.length-n.amount,n.amount);return a.push(...o),r}function o(e){let n=[];for(let i=0;i<e.length;i+=1){let a=e[i];if(!a||a.length===0||t(a))continue;let o=r(a);if(!o)continue;let s=o.count===a.length;for(let t=0;t<e.length;t+=1){if(i===t)continue;let r=e[t];if(!r||r.length>=4||r.length===0&&s||r.length>0&&r[r.length-1]!==o.color)continue;let a=Math.min(o.count,4-r.length);a<=0||n.push({from:i,to:t,amount:a,color:o.color})}}return n}function s(e){let t=[];for(let n=0;n<e.length;n+=1){let i=e[n];if(!i||i.length===0)continue;let a=r(i);if(a)for(let r=0;r<e.length;r+=1){if(n===r)continue;let o=e[r];if(!o||o.length>=4||o.length>0&&o[o.length-1]===a.color)continue;let s=4-o.length,c=Math.min(a.count,s);for(let e=1;e<=c;e+=1){let o=e<a.count,s=e===i.length;(o||s)&&t.push({from:n,to:r,amount:e,color:a.color})}}}return t}function c(e,t,n,r){let i=h(e,t),o=``;for(let e=0;e<n;e+=1){let e=s(i).filter(e=>u(a(i,e))!==o);if(e.length===0)break;let t=e.filter(e=>(i[e.to]?.length??0)>0),n=t.length>0&&r()<.86?t:e,c=n[Math.floor(r()*n.length)];o=u(i),i=a(i,c)}return i}function l(e){return e.some(e=>t(e))}function u(e){return e.map(e=>e.join(`.`)).sort().join(`|`)}function d(e){let t=new Set,n=0;for(let r of e)for(let e=0;e<r.length;e+=1)t.add(r[e]),(e===0||r[e]!==r[e-1])&&(n+=1);return n-t.size}function f(t,r=8e4){let i=e(t);if(n(i))return{moves:[],nodes:0};let s=[{state:i,parent:-1,move:null}],c=new Set([u(i)]);for(let e=0;e<s.length;e+=1){if(e>r)return null;let t=s[e];for(let r of o(t.state)){let i=a(t.state,r),o=u(i);if(c.has(o))continue;c.add(o);let l=s.length;if(s.push({state:i,parent:e,move:r}),n(i)){let e=[],t=l;for(;t>0;){let n=s[t];n.move&&e.push(n.move),t=n.parent}return e.reverse(),{moves:e,nodes:s.length}}}}return null}function p(e){let n=f(e,25e3);if(n&&n.moves.length>0)return n.moves[0];let r=o(e);if(r.length===0)return null;let i=r[0],s=1/0;for(let n of r){let r=a(e,n),o=t(r[n.to]??[]),c=d(r)-(o?.6:0)-n.amount*.01;c<s&&(s=c,i=n)}return i}function m(e){let t=e>>>0;return()=>{t|=0,t=t+1831565813|0;let e=Math.imul(t^t>>>15,1|t);return e=e+Math.imul(e^e>>>7,61|e)^e,((e^e>>>14)>>>0)/4294967296}}function h(e,t){let n=[];for(let t=0;t<e;t+=1)n.push([t,t,t,t]);for(let e=0;e<t;e+=1)n.push([]);return n}function g(e){return e.filter(e=>new Set(e).size>1).length}function _(e,t){let r=Math.min(8,3+Math.floor((e-1)/2)),i=e>=14?1:2,a=8+e*3,o=e<5?4:e<10?2:1,s=c(r,i,a,t),u=0;for(;(n(s)||g(s)<2||l(s))&&u<8;)s=c(r,i,a+u*2,t),u+=1;let d=f(s,e>=12?18e3:4e4),p=d&&d.moves.length>0?d.moves.length:Math.max(6,Math.round(a*.45));return{tubes:s,par:p,reveal:o,colors:r}}function ee(e,t){return e<=t?3:e<=t+Math.max(2,Math.ceil(t*.5))?2:1}function te(e,t,n){return n*500+Math.max(0,t*40-e*25)}function ne(e,t,n,r){return 100+e*15+r*80+Math.max(0,(n+4-t)*12)}var v=[{id:1,name:`First Flame`,par:4,reveal:4,tubes:[[0,0,0,1],[1,1,1,2],[2,2,2,0],[],[]]},{id:2,name:`Twin Ash`,par:6,reveal:4,tubes:[[0,0,1],[],[2,2,0,1],[1],[2,2,0,1]]},{id:3,name:`Kiln Dust`,par:8,reveal:4,tubes:[[0,0,2],[1,1,0,2],[],[3,1,2,0],[2],[3,3,3,1]]},{id:4,name:`River Ore`,par:7,reveal:4,tubes:[[0,3],[1,1,1,2],[2,2,2,1],[3],[3],[0,0,0,3]]},{id:5,name:`Temple Ink`,par:11,reveal:4,tubes:[[0,0,0,2],[1,1,4,3],[2,2,1,4],[3,0,4],[4,1,3],[],[2,3]]},{id:6,name:`Cedar Smoke`,par:8,reveal:4,tubes:[[3,3,3,1],[1],[2,1],[1],[4,4,4,0],[0,0,0,4],[2,2,2,3]]},{id:7,name:`Copper Bell`,par:9,reveal:2,tubes:[[0],[1,1,1,2],[2,0],[3,3,3,2],[0],[4,4,4,1],[4,2,3,0]]},{id:8,name:`Moon Lacquer`,par:10,reveal:2,tubes:[[0,0,4,3],[1,1,1,5],[2,2,0],[3,0],[4,4,3],[4,2,2,1],[5,5,5,3],[]]},{id:9,name:`Fifth Gate`,par:12,reveal:2,tubes:[[0,0,0,4],[1,3],[2,2,2,4],[3],[4,1,5,3],[5,5,5,1],[0,2,1,4],[3]]},{id:10,name:`Hidden Seam`,par:12,reveal:2,tubes:[[0,0,0,2],[1,1,2],[],[3,3,1,5],[4,3,0,5],[2],[4,4,4,3],[1,5,5,2]]},{id:11,name:`Violet Kiln`,par:12,reveal:2,tubes:[[],[1,4,4,1],[2,2,2,1],[0],[4,4,2,5],[5,5,5,3],[0,3,0],[3,1,3,0]]},{id:12,name:`Storm Glass`,par:16,reveal:2,tubes:[[0,4,0,2],[1,5,0,5],[2,0,5],[3,2,2,1],[4,6,1],[5,1],[6,6,6,4],[3,3,3,4],[]]},{id:13,name:`Sealed Pigment`,par:11,reveal:1,tubes:[[0,2,5],[5],[2,2,2,6],[3,3,3,5],[4,4,4,1],[],[6,6,3,5],[1,1,1,4],[0,0,0,6]]},{id:14,name:`Night Market`,par:13,reveal:1,tubes:[[4,4,4,1],[1,0,0,3],[2,2,6,5],[3,3,3,1],[4,1,5],[5],[0,0,2,6],[6,6,2,5]]},{id:15,name:`Eight Banners`,par:14,reveal:1,tubes:[[0,0,0,1],[4,4,4,1],[2,6,6,5],[3,3,5,2],[],[],[6,6,3,1],[5,2,2,3],[4,5,1,0]]},{id:16,name:`Forge Whisper`,par:17,reveal:1,tubes:[[0,3],[1,0,2],[2,2,4,3],[],[4,3,0,2],[5,5,4,7],[6,6,3],[7,7,7,0],[5,5,4,6],[1,1,1,6]]},{id:17,name:`Last Empty`,par:17,reveal:1,tubes:[[],[1,6,1],[2,2,0],[3,3,3,4],[5,5,0,1],[5,5,2,0],[6,6,6,4],[7,7,7,4],[7,4,0],[1,3,2]]},{id:18,name:`Crucible`,par:15,reveal:1,tubes:[[0,4,1,2],[1,1,5,2],[2,3],[3,3],[4,4,4,0],[5,5,7,5],[6,0,2,3],[7,7,7,1],[6,6,6,0]]},{id:19,name:`Daimyo's Set`,par:15,reveal:1,tubes:[[0,5],[1,1,2,5],[2,2,0,1],[3,3,0,2],[4,4,4,0],[5],[6,6,6,3],[7,7,6,4],[5],[7,7,1,3]]},{id:20,name:`The Sixth Gate`,par:14,reveal:1,tubes:[[0,0,0,3],[1,6,6,3],[2,2,2,1],[3,3,7,5],[4],[5,5,4],[6,6,0,4],[7,1,1,2],[7,7,4,5]]}],y=[{name:`Akane`,hex:`#E23B3B`,deep:`#8C1E1E`,hi:`#FF8A7A`,mark:`circle`},{name:`Kohaku`,hex:`#EE7A12`,deep:`#A84C08`,hi:`#FFC087`,mark:`triangle`},{name:`Yamabuki`,hex:`#F2D230`,deep:`#B8960A`,hi:`#FFF3A8`,mark:`diamond`},{name:`Midori`,hex:`#1FA86A`,deep:`#0C6A40`,hi:`#8EEDC0`,mark:`square`},{name:`Ai`,hex:`#3B73E8`,deep:`#1A45A8`,hi:`#A9C6FF`,mark:`plus`},{name:`Murasaki`,hex:`#9A6BFF`,deep:`#5C34C2`,hi:`#D4C2FF`,mark:`star`},{name:`Sakura`,hex:`#F25C9A`,deep:`#B02864`,hi:`#FFB3D0`,mark:`petal`},{name:`Sora`,hex:`#1BB8D4`,deep:`#0A7288`,hi:`#9AEEF8`,mark:`wave`}];function b(e){return y[e]??y[0]}var x=null,S=null,C=!1,w=null;function T(e){C=e,S&&x&&S.gain.setTargetAtTime(e?0:.85,x.currentTime,.02)}function E(){let e=window.AudioContext??window.webkitAudioContext;if(e){if(!x){x=new e({latencyHint:`interactive`}),S=x.createGain(),S.gain.value=C?0:.85,S.connect(x.destination),w=x.createBuffer(1,Math.floor(x.sampleRate*.4),x.sampleRate);let t=w.getChannelData(0);for(let e=0;e<t.length;e+=1)t[e]=Math.random()*2-1}x.state===`suspended`&&x.resume()}}function D(e,t,n){if(!x||!S)return null;let r=x.createGain(),i=x.currentTime;return r.gain.setValueAtTime(1e-4,i),r.gain.exponentialRampToValueAtTime(Math.max(2e-4,t),i+.02),r.gain.exponentialRampToValueAtTime(1e-4,i+n),r.connect(S),r}function O(e,t,n,r,i){if(!x||C)return;let a=D(0,r,t);if(!a)return;let o=x.createOscillator();o.type=n,o.frequency.setValueAtTime(e,x.currentTime),i&&o.frequency.exponentialRampToValueAtTime(Math.max(40,i),x.currentTime+t*.9),o.connect(a),o.start(),o.stop(x.currentTime+t+.02)}function k(){O(620,.07,`sine`,.04,880)}function A(){O(480,.06,`triangle`,.045,720)}function j(){O(180,.12,`square`,.03,110)}function re(e){if(!x||!S||!w||C)return;O(420+e*28,.32,`sine`,.05,140+e*8);let t=x.createBufferSource();t.buffer=w;let n=x.createBiquadFilter();n.type=`bandpass`,n.frequency.value=540+e*40,n.Q.value=.7;let r=D(0,.045,.28);r&&(t.connect(n),n.connect(r),t.start(),t.stop(x.currentTime+.3))}function ie(){O(523,.12,`sine`,.05,784),window.setTimeout(()=>O(784,.16,`triangle`,.04,1046),70)}function ae(){[523,659,784,1046].forEach((e,t)=>{window.setTimeout(()=>O(e,.22,`triangle`,.05),t*110)})}var M=`rokumon-sort`,N=`1.0.0`;function oe(){if(typeof window>`u`)return null;let e=window.Hub;return e&&typeof e==`object`?e:null}function P(e,...t){let n=oe()?.[e];if(typeof n==`function`)try{n(...t)}catch{}}function se(){P(`ready`,{game:M,version:N,modes:[`campaign`,`endless`]})}function F(e,t={}){P(`event`,e,{game:M,...t,at:Date.now()})}function ce(e){P(`score`,{game:M,...e})}function le(e){let t={game:M,...e};P(`gameOver`,t),P(`event`,`game_over`,t)}var I=`rokumon-sort-v1`;function L(){return{version:1,unlocked:1,best:{},endlessBest:0,sound:!0,seenHelp:!1}}function ue(){let e=L();try{let t=localStorage.getItem(I);if(!t)return e;let n=JSON.parse(t);if(!n||n.version!==1)return e;let r=Number(n.unlocked);return{version:1,unlocked:Number.isFinite(r)?Math.max(1,Math.min(20,Math.floor(r))):1,best:n.best&&typeof n.best==`object`?n.best:{},endlessBest:Number(n.endlessBest)>0?Number(n.endlessBest):0,sound:n.sound!==!1,seenHelp:n.seenHelp===!0}}catch{return e}}function R(e){try{localStorage.setItem(I,JSON.stringify(e))}catch{}}function z(e){return Object.values(e.best).reduce((e,t)=>e+(t?.score||0),0)}function B(e){return Object.values(e.best).reduce((e,t)=>e+(t?.stars||0),0)}var V=`
+<style>
+html,body{margin:0;height:100%;background:#100e0c;color:#f3eadb}
+#app{min-height:100dvh;height:100dvh}
 .rs, .rs * { box-sizing: border-box; }
 .rs {
   height: 100%;
@@ -382,104 +379,1491 @@
 @media (prefers-reduced-motion: reduce) {
   .rs-vial, .rs-vial.is-shake { transition: none; animation: none; }
 }
-`,H=`rokumon-sort-style`;function de(){return window.matchMedia(`(prefers-reduced-motion: reduce)`).matches}function U(e,t,n){if(n<=e)return 0;if(n>=t)return 1;let r=(n-e)/(t-e);return r*r*(3-2*r)}function fe(){let e=document.getElementById(H);e||(e=document.createElement(`style`),e.id=H,document.head.appendChild(e)),e.textContent=V}function W(e,t=12){return`<svg viewBox="0 0 16 16" width="${t}" height="${t}" aria-hidden="true"><path d="M8 1.6 9.8 6h4.6l-3.7 2.8 1.4 4.6L8 10.8 3.9 13.4 5.3 8.8 1.6 6h4.6Z" fill="${e?`#e0a24a`:`none`}" stroke="${e?`#e0a24a`:`#6d6256`}" stroke-width="1" stroke-linejoin="round"/></svg>`}function G(e,t=!1){let n=t?28:12;return`<span class="${t?`rs-bigstars`:`rs-stars`}" aria-label="${e} of 3 seals">${[0,1,2].map(t=>W(t<e,n)).join(``)}</span>`}function K(e){return`<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${e}</svg>`}var q={back:K(`<path d="M15 5 8 12l7 7"/><path d="M9 12h10"/>`),undo:K(`<path d="M8 8 4 12l4 4"/><path d="M4 12h10a6 6 0 1 1 0 6"/>`),restart:K(`<path d="M20 12a8 8 0 1 1-2.2-5.5"/><path d="M20 4v6h-6"/>`),hint:K(`<path d="M12 3a6 6 0 0 0-3 11v2h6v-2a6 6 0 0 0-3-11Z"/><path d="M10 19h4"/><path d="M10 21h4"/>`),pause:K(`<path d="M9 5v14"/><path d="M15 5v14"/>`),soundOn:K(`<path d="M4 10h3l5-4v12l-5-4H4Z"/><path d="M16 9a4 4 0 0 1 0 6"/>`),soundOff:K(`<path d="M4 10h3l5-4v12l-5-4H4Z"/><path d="m17 10 4 4"/><path d="m21 10-4 4"/>`)};function pe(e){let t=`stroke="#1a120c" stroke-width="1.6" fill="none" stroke-linejoin="round" stroke-linecap="round"`;switch(e){case`circle`:return`<circle cx="8" cy="8" r="4" ${t}/>`;case`triangle`:return`<path d="M8 2.8 13.2 13H2.8Z" ${t}/>`;case`diamond`:return`<path d="M8 2.2 13.2 8 8 13.8 2.8 8Z" ${t}/>`;case`square`:return`<rect x="3.4" y="3.4" width="9.2" height="9.2" rx="1" ${t}/>`;case`plus`:return`<path d="M8 3.2v9.6M3.2 8h9.6" ${t}/>`;case`star`:return`<path d="M8 2.2 9.5 6h4L10.6 8.3 11.8 12 8 9.7 4.2 12l1.2-3.7L2.5 6h4Z" ${t}/>`;case`petal`:return`<path d="M8 13s4-2.2 4-5.2A4 4 0 0 0 8 4a4 4 0 0 0-4 3.8C4 10.8 8 13 8 13Z" ${t}/>`;case`wave`:return`<path d="M2 8c1.4-1.6 2.2-1.6 3.6 0S7.8 9.6 9.2 8 11.4 6.4 12.8 8 15 9.6 15 9.6" ${t}/>`;default:return`<circle cx="8" cy="8" r="3" ${t}/>`}}function J(){return`<circle cx="8" cy="8" r="2.4" fill="none" stroke="#d9cbb8" stroke-width="1.4"/>`}function me(){return`<svg class="rs-crest" viewBox="0 0 80 80" aria-hidden="true">
-    <polygon points="40,6 70,23 70,57 40,74 10,57 10,23" fill="none" stroke="#e0a24a" stroke-width="2"/>
-    <polygon points="40,16 60,28 60,52 40,64 20,52 20,28" fill="none" stroke="rgba(224,162,74,0.35)" stroke-width="1"/>
-    ${[[40,26,`#E23B3B`],[53,34,`#EE7A12`],[53,50,`#F2D230`],[40,58,`#1FA86A`],[27,50,`#3B73E8`],[27,34,`#9A6BFF`]].map(([e,t,n])=>`<circle cx="${e}" cy="${t}" r="4.2" fill="${n}"/>`).join(``)}
-  </svg>`}function Y(e,t){let n=[];for(let t of e){let e=t.frac;for(;e>.02;){let r=Math.min(1,e);n.push({color:t.color,frac:r,hidden:!1}),e-=r}}let r=0;for(let e=n.length-1;e>=0;--e){let i=n[e];i.hidden=r>=t-.001,r+=i.frac}return n}function he(e,t){let n=e.tubes.map(e=>e.map(e=>({color:e,frac:1,hidden:!1}))),r=e.anim;if(!r)return n.map(t=>Y(t,e.reveal));let i=U(.08,.62,t)*r.amount,a=U(.28,.92,t)*r.amount,o=n[r.from]??[],s=i;for(let e=o.length-1;e>=0&&s>.001;--e){let t=o[e],n=Math.min(t.frac,s);t.frac-=n,s-=n}if(n[r.from]=o.filter(e=>e.frac>.02),a>.02){let e=n[r.to]??[];e.push({color:r.color,frac:a,hidden:!1}),n[r.to]=e}return n.map(t=>Y(t,e.reveal))}function ge(e,n,r,i){if(t(e))return`Vial ${n+1}, sealed ${b(e[0]).name}`;if(e.length===0)return`Vial ${n+1}, empty${i?`, selected`:``}`;let a=b(e[e.length-1]).name,o=e.some((t,n)=>e.length-1-n>=r);return`Vial ${n+1}, top ${a}, ${e.length} of 4${o?`, deeper pigment hidden`:``}${i?`, selected`:``}`}function _e(e){return e.map((t,n)=>{let r=n===e.length-1;if(t.hidden)return`<span class="rs-layer is-hidden${r?` is-top`:``}" style="--frac:${t.frac.toFixed(3)}"><svg class="rs-mark" viewBox="0 0 16 16" aria-hidden="true">${J()}</svg></span>`;let i=b(t.color);return`<span class="rs-layer${r?` is-top`:``}" style="--frac:${t.frac.toFixed(3)};--hi:${i.hi};--mid:${i.hex};--deep:${i.deep}"><svg class="rs-mark" viewBox="0 0 16 16" aria-hidden="true">${pe(i.mark)}</svg></span>`}).join(``)}function ve(r){fe();let o=ue();T(!o.sound);let s=`menu`,c={kind:`campaign`,id:1},l=null,u=o.seenHelp?null:`help`,d=0,f=0,h=!1,g={get screen(){return s},get tubes(){return l?e(l.tubes):null},get moves(){return l?.moves??0},get won(){return l?.won??!1},startLevel(e){V(e)},pour(e,t){return!l||l.anim||l.won?!1:(l.selected=e,K(t),!0)}};window.__rokumon=g;function y(e){let t=r.querySelector(`.rs-live`);t&&(t.textContent=e)}function x(){r.innerHTML=`<main class="rs">${S()}${M()}<p class="rs-live" aria-live="polite"></p></main>`}function S(){return s===`menu`?C():s===`select`?w():D()}function C(){let e=B(o);return`<section class="rs-screen"><div class="rs-menu">
-      <div class="rs-hero">
-        ${me()}
-        <p class="rs-kicker">Rokumon Games</p>
-        <h1 class="rs-display">Rokumon Sort</h1>
-        <p class="rs-sub">Pour the forge pigments until every crystal vial holds a single sealed colour.</p>
-      </div>
-      <div class="rs-actions">
-        <button class="rs-btn primary" data-act="campaign">Campaign</button>
-        <button class="rs-btn" data-act="endless">Night Pour</button>
-        <button class="rs-btn ghost" data-act="help">How to pour</button>
-        <button class="rs-btn ghost" data-act="sound">${o.sound?`Sound on`:`Sound off`}</button>
-      </div>
-      <div class="rs-meta">
-        <span>${e} / 60 seals</span>
-        <span>Best run ${o.endlessBest}</span>
-      </div>
-    </div></section>`}function w(){let e=v.map(e=>{let t=e.id>o.unlocked,n=o.best[String(e.id)];return`<button class="rs-gate${t?` is-locked`:``}${n?` is-done`:``}" data-act="gate" data-i="${e.id}" ${t?`disabled`:``}>
-        <strong>${e.id}</strong>
-        <em>${e.name}</em>
-        ${G(n?.stars??0)}
-      </button>`}).join(``);return`<section class="rs-screen"><div class="rs-select">
-      <div class="rs-head">
-        <button class="rs-iconbtn" data-act="menu" aria-label="Back">${q.back}</button>
-        <h2 class="rs-display">The Six Gates</h2>
-      </div>
-      <div class="rs-grid">${e}</div>
-    </div></section>`}function D(){return l?`<section class="rs-screen"><div class="rs-play">
-      <div class="rs-playhead">
-        <button class="rs-iconbtn" data-act="back" aria-label="Back">${q.back}</button>
-        <div class="rs-titles">
-          <h2 class="rs-display">${X(l.name)}</h2>
-          <p>${X(l.subtitle)} · par ${l.par}</p>
-        </div>
-        <div class="rs-moves"><b data-moves>${l.moves}</b><span>Moves</span></div>
-      </div>
-      ${l.coach?`<p class="rs-coach">Tap a vial, then tap another. Matching colours pour. Empty vials accept anything.</p>`:``}
-      <div class="rs-board-wrap">
-        <svg class="rs-stream" aria-hidden="true"></svg>
-        <div class="rs-board">${O(0)}</div>
-      </div>
-      <div class="rs-tools">
-        <button class="rs-tool" data-act="undo" ${l.undo.length?``:`disabled`}>${q.undo}<span>Undo</span></button>
-        <button class="rs-tool" data-act="restart">${q.restart}<span>Restart</span></button>
-        <button class="rs-tool" data-act="hint" ${l.hints>0?``:`disabled`}>${q.hint}<span>Hint <b>${l.hints}</b></span></button>
-        <button class="rs-tool" data-act="pause">${q.pause}<span>Pause</span></button>
-      </div>
-    </div></section>`:``}function O(e){if(!l)return``;let n=he(l,e),r=l.anim,i=r?Math.sin(Math.min(e/.8,1)*Math.PI)*32*r.dir:0;return l.tubes.map((e,a)=>{let o=l.selected===a;return`<button class="${[`rs-vial`,o?`is-selected`:``,l.cursor===a?`is-cursor`:``,t(e)?`is-sealed`:``,r?.from===a?`is-anim`:``,l.shake===a?`is-shake`:``,l.hint?.from===a?`is-hint-from`:``,l.hint?.to===a?`is-hint-to`:``].filter(Boolean).join(` `)}" data-act="vial" data-i="${a}" style="--tilt:${r?.from===a?i.toFixed(2):`0`}deg" aria-label="${X(ge(e,a,l.reveal,o))}">
-          <span class="rs-neck"></span>
-          <span class="rs-body"><span class="rs-stack">${_e(n[a]??[])}</span><span class="rs-glass"></span></span>
-          <span class="rs-index">${a+1}</span>
-        </button>`}).join(``)}function M(){return s===`play`&&l?.won&&l.result?P(l.result):u===`help`?N():u===`pause`&&s===`play`?oe():``}function N(){return`<div class="rs-modal" role="dialog" aria-modal="true" aria-labelledby="rs-help-title">
-      <div class="rs-card">
-        <p class="rs-kicker">At the forge</p>
-        <h3 id="rs-help-title" class="rs-display">How to pour</h3>
-        <ol class="rs-rules">
-          <li><b>1.</b> Each vial holds four measures.</li>
-          <li><b>2.</b> Tap a source, then a target. On a keyboard, arrows move and Enter pours.</li>
-          <li><b>3.</b> Pour only onto the same top colour, or into an empty vial.</li>
-          <li><b>4.</b> Only the top run of one colour moves, and only as far as there is room.</li>
-          <li><b>5.</b> A full vial of one colour seals. Seal every colour.</li>
-          <li><b>6.</b> Later gates hide deeper pigment until you pour it clear. Each colour also has its own seal mark.</li>
-        </ol>
-        <div class="rs-actions">
-          <button class="rs-btn primary" data-act="close-help">Begin</button>
-        </div>
-      </div>
-    </div>`}function oe(){return`<div class="rs-modal" role="dialog" aria-modal="true" aria-labelledby="rs-pause-title">
-      <div class="rs-card">
-        <p class="rs-kicker">Held</p>
-        <h3 id="rs-pause-title" class="rs-display">Paused</h3>
-        <div class="rs-actions">
-          <button class="rs-btn primary" data-act="resume">Resume</button>
-          <button class="rs-btn" data-act="restart">Restart vial</button>
-          <button class="rs-btn ghost" data-act="help">How to pour</button>
-          <button class="rs-btn ghost" data-act="sound">${o.sound?`Sound on`:`Sound off`}</button>
-          <button class="rs-btn ghost" data-act="quit">${c.kind===`endless`?`End run`:`Leave gate`}</button>
-        </div>
-      </div>
-    </div>`}function P(e){let t=c.kind===`endless`,n=!t&&c.kind===`campaign`&&c.id===20,r=n?`Sixth Gate`:t?`Stage ${c.kind===`endless`?c.stage:1}`:l?.name??`Sealed`,i=n?`The catalogue is sealed in ${l?.moves} moves.`:`${l?.moves} moves · par ${l?.par}. ${e.improved?`A finer pour.`:`Best ${e.bestMoves}.`}`;return`<div class="rs-modal" role="dialog" aria-modal="true" aria-labelledby="rs-win-title">
-      <div class="rs-card">
-        <p class="rs-kicker">${t?`Night Pour`:`Gate clear`}</p>
-        <h3 id="rs-win-title" class="rs-display">${X(r)}</h3>
-        ${G(e.stars,!0)}
-        <p>${X(i)}</p>
-        <p>${t?`Run score ${c.kind===`endless`?c.score:0}`:`Level score ${e.score}`}</p>
-        <div class="rs-actions">
-          ${n?``:`<button class="rs-btn primary" data-act="next">${t?`Next crucible`:`Next gate`}</button>`}
-          <button class="rs-btn" data-act="replay">Pour again</button>
-          <button class="rs-btn ghost" data-act="quit">${t?`End run`:`Level select`}</button>
-        </div>
-      </div>
-    </div>`}function I(e){let t=r.querySelector(`.rs-board`);if(!t||!l)return;t.innerHTML=O(e);let n=r.querySelector(`.rs-stream`);n&&(n.innerHTML=L(e));let i=r.querySelector(`[data-moves]`);i&&(i.textContent=String(l.moves))}function L(e){if(!l?.anim)return``;let t=U(.12,.26,e)*(1-U(.74,.92,e));if(t<=.02)return``;let n=r.querySelector(`.rs-board-wrap`),i=r.querySelector(`.rs-vial[data-i="${l.anim.from}"] .rs-neck`),a=r.querySelector(`.rs-vial[data-i="${l.anim.to}"] .rs-neck`);if(!n||!i||!a)return``;let o=n.getBoundingClientRect(),s=i.getBoundingClientRect(),c=a.getBoundingClientRect(),u=s.left+s.width/2-o.left,d=s.top+s.height/2-o.top,f=c.left+c.width/2-o.left,p=c.bottom-o.top+8,m=b(l.anim.color),h=u+(f-u)*.35,g=d+16,_=f,ee=p-36;return`<path d="M ${u.toFixed(1)} ${d.toFixed(1)} C ${h.toFixed(1)} ${g.toFixed(1)}, ${_.toFixed(1)} ${ee.toFixed(1)}, ${f.toFixed(1)} ${p.toFixed(1)}" fill="none" stroke="${m.hex}" stroke-width="8" stroke-linecap="round" opacity="${t.toFixed(3)}"/>
-      <circle cx="${f.toFixed(1)}" cy="${p.toFixed(1)}" r="${(4+t*3).toFixed(1)}" fill="${m.hi}" opacity="${t.toFixed(3)}"/>`}function V(t){let n=v.find(e=>e.id===t);!n||t>o.unlocked||(c={kind:`campaign`,id:t},h=!1,l=W(n.name,`Gate ${t} of 20`,e(n.tubes),n.reveal,n.par,t===1),s=`play`,u=null,F(`level_start`,{mode:`campaign`,level:t,name:n.name,par:n.par}),x(),y(`${n.name}. Par ${n.par}.`))}function H(e){if((e||c.kind!==`endless`)&&(c={kind:`endless`,stage:1,score:0,seed:(Date.now()^Math.floor(Math.random()*1e9))>>>0},h=!1),c.kind!==`endless`)return;let t=_(c.stage,m(c.seed+c.stage*997));l=W(`Stage ${c.stage}`,`${t.colors} pigments`,t.tubes,t.reveal,t.par,!1),s=`play`,u=null,F(`level_start`,{mode:`endless`,stage:c.stage,par:t.par,colors:t.colors}),x(),y(`Night Pour stage ${c.stage}.`)}function W(t,n,r,i,a,o){return{name:t,subtitle:n,tubes:r,initial:e(r),reveal:i,par:a,moves:0,hints:3,undo:[],selected:null,cursor:0,hint:null,shake:null,won:!1,anim:null,result:null,coach:o}}function K(e){if(!l||l.won||l.anim||e<0||e>=l.tubes.length)return;l.cursor=e;let n=l.tubes[e];if(l.selected==null){if(n.length===0){I(0);return}if(t(n)){j(),xe(e),y(`Vial ${e+1} is sealed.`);return}l.selected=e,A(),I(0),y(`Selected vial ${e+1}, ${b(n[n.length-1]).name}.`);return}if(l.selected===e){l.selected=null,I(0);return}let r=i(l.tubes,l.selected,e);r?pe(r):(j(),xe(e),y(`That pour will not take.`))}function pe(t){if(!l)return;l.undo.push(e(l.tubes)),l.undo.length>200&&l.undo.shift();let n=r.querySelector(`.rs-vial[data-i="${t.from}"]`),i=r.querySelector(`.rs-vial[data-i="${t.to}"]`),a=t.to>=t.from?1:-1;if(n&&i){let e=n.getBoundingClientRect(),t=i.getBoundingClientRect();a=t.left+t.width/2>=e.left+e.width/2?1:-1}l.anim={...t,start:performance.now(),dur:de()?160:700,dir:a},l.selected=null,l.hint=null,l.coach=!1,re(t.color),cancelAnimationFrame(d),d=requestAnimationFrame(J)}function J(e){if(!l?.anim)return;let t=Math.min(1,(e-l.anim.start)/l.anim.dur);I(t),t>=1?Y():d=requestAnimationFrame(J)}function Y(){if(!l?.anim)return;let e=l.anim;l.tubes=a(l.tubes,e),l.moves+=1,l.anim=null;let r=l.tubes[e.to]??[];t(r)&&(ie(),y(`${b(r[0]).name} sealed.`)),n(l.tubes)?ve():I(0)}function ve(){if(!l)return;l.won=!0;let e=ee(l.moves,l.par);if(c.kind===`campaign`){let t=te(l.moves,l.par,e),n=String(c.id),r=o.best[n],i=!r||e>r.stars||e===r.stars&&l.moves<r.moves;(!r||i)&&(o.best[n]={moves:l.moves,stars:e,score:t}),c.id===o.unlocked&&c.id<20&&(o.unlocked=c.id+1),R(o),l.result={stars:e,score:o.best[n]?.score??t,gained:t,improved:i,bestMoves:o.best[n]?.moves??l.moves};let a={mode:`campaign`,level:c.id,moves:l.moves,stars:e,par:l.par,levelScore:t,score:z(o),totalStars:B(o)};F(`level_complete`,a),ce(a),c.id===20&&le({mode:`campaign`,score:z(o),stars:B(o),completed:!0})}else{let t=ne(c.stage,l.moves,l.par,e);c.score+=t;let n=c.score>o.endlessBest;n&&(o.endlessBest=c.score,R(o)),l.result={stars:e,score:c.score,gained:t,improved:n,bestMoves:l.moves};let r={mode:`endless`,stage:c.stage,moves:l.moves,stars:e,par:l.par,stageScore:t,score:c.score};F(`endless_stage`,r),F(`level_complete`,r),ce(r)}ae(),x(),y(`Sealed in ${l.moves} moves. ${l.result?.stars??0} stars.`)}function Z(){if(!l||l.anim||l.won||l.undo.length===0)return;let e=l.undo.pop();e&&(l.tubes=e,l.moves=Math.max(0,l.moves-1),l.selected=null,l.hint=null,k(),I(0),y(`Undid the last pour.`))}function ye(){l&&!l.anim&&(l.tubes=e(l.initial),l.moves=0,l.undo=[],l.selected=null,l.hint=null,l.won=!1,l.result=null,l.hints=3,u=null,k(),x(),y(`Vial restarted.`))}function be(){if(!l||l.anim||l.won||l.hints<=0)return;let e=p(l.tubes);e?(--l.hints,l.hint={from:e.from,to:e.to},l.cursor=e.from,F(`hint_used`,{mode:c.kind,level:c.kind===`campaign`?c.id:c.stage,from:e.from+1,to:e.to+1,hintsLeft:l.hints}),A(),x(),y(`Hint: pour vial ${e.from+1} into vial ${e.to+1}.`),window.setTimeout(()=>{l&&l.hint?.from===e.from&&(l.hint=null,l.anim||I(0))},2600)):(j(),y(`No clear pour from here.`))}function xe(e){l&&(l.shake=e,I(0),window.clearTimeout(f),f=window.setTimeout(()=>{l&&(l.shake=null,l.anim||I(0))},380))}function Se(){o.sound=!o.sound,T(!o.sound),R(o),o.sound&&(E(),k()),x()}function Ce(){u=null,o.seenHelp||(o.seenHelp=!0,R(o)),x()}function we(){if(c.kind===`endless`&&!h){h=!0;let e=c.score>0?c.stage:0;le({mode:`endless`,score:c.score,stagesCleared:l?.won?c.stage:Math.max(0,c.stage-1),best:o.endlessBest,completed:!1,cleared:e})}s=c.kind===`endless`?`menu`:`select`,u=null,l=null,x()}function Q(){if(c.kind===`campaign`){if(c.id>=20){s=`select`,l=null,x();return}V(c.id+1)}else c.stage+=1,H(!1)}function Te(e){let t=e.target?.closest(`[data-act]`);if(!t)return;E();let n=t.dataset.act;n===`campaign`?(k(),s=`select`,u=null,x()):n===`endless`?(k(),H(!0)):n===`help`?(u=`help`,x()):n===`close-help`?Ce():n===`sound`?Se():n===`menu`?(s=`menu`,u=null,x()):n===`gate`?V(Number(t.dataset.i)):n===`vial`?K(Number(t.dataset.i)):n===`undo`?Z():n===`restart`?ye():n===`hint`?be():n===`pause`?l&&!l.won&&(u=`pause`,x()):n===`resume`?(u=null,x()):n===`back`||n===`quit`?c.kind===`endless`?we():(s=`select`,u=null,l=null,x()):n===`next`?Q():n===`replay`&&(c.kind===`endless`?H(!1):V(c.id))}function Ee(e){if(!(e.target instanceof HTMLElement&&e.target.closest(`button`)&&e.key!==`Escape`)){if(e.key===`m`||e.key===`M`)Se();else if(e.key===`Escape`)e.preventDefault(),u===`help`?Ce():u===`pause`?(u=null,x()):l?.won?we():s===`play`?(u=`pause`,x()):s===`select`&&(s=`menu`,x());else if(s===`play`&&l){if(l.won)e.key===`Enter`&&Q();else if(!u){if(e.key===`ArrowRight`||e.key===`ArrowLeft`){e.preventDefault();let t=e.key===`ArrowRight`?1:-1;l.cursor=(l.cursor+t+l.tubes.length)%l.tubes.length,I(0)}else e.key===`Enter`||e.key===` `?(e.preventDefault(),K(l.cursor)):((e.key===`u`||e.key===`U`)&&Z(),(e.key===`h`||e.key===`H`)&&be(),(e.key===`r`||e.key===`R`)&&ye())}}}}function $(){document.visibilityState===`visible`&&o.sound&&E()}return r.addEventListener(`click`,Te),r.addEventListener(`pointerdown`,()=>E()),window.addEventListener(`keydown`,Ee),document.addEventListener(`visibilitychange`,$),x(),se(),u===`help`&&y(`How to pour is open.`),()=>{cancelAnimationFrame(d),window.clearTimeout(f),r.removeEventListener(`click`,Te),window.removeEventListener(`keydown`,Ee),document.removeEventListener(`visibilitychange`,$),r.innerHTML=``;let e=window;e.__rokumon===g&&delete e.__rokumon}}function X(e){return e.replace(/[&<>"]/g,e=>e===`&`?`&amp;`:e===`<`?`&lt;`:e===`>`?`&gt;`:`&quot;`)}var Z=document.getElementById(`app`);Z&&ve(Z)})();
+.rs-view { flex: 1; min-height: 0; display: flex; flex-direction: column; }
+.rs-iconbtn:focus-visible { outline: 2px solid #e0a24a; outline-offset: 2px; }
+.rs-board {
+  width: 100%;
+  max-width: 640px;
+  grid-template-columns: repeat(var(--cols, 4), minmax(0, 78px));
+}
+.rs-vial { width: 100%; max-width: 78px; justify-self: center; }
+.rs-vial:focus-visible { outline-offset: 4px; border-radius: 16px; }
+.rs-gate.is-locked { opacity: 0.55; }
+.rs-coach:empty { display: none; }
+.rs-coach.is-warn { color: #ffd29a; font-weight: 650; }
+@media (prefers-reduced-motion: reduce) {
+  .rs-vial { transform: translateY(var(--lift, 0px)); }
+  .rs-stream { display: none; }
+}
+</style>
+</head>
+<body>
+<div id="app"><noscript><p style="padding:16px">Rokumon Sort needs JavaScript.</p></noscript></div>
+<script id="rs-core">
+/* Rokumon Sort core: pure rules, solver, generator, scoring and save validation.
+ * No DOM access. Loaded by index.html in the page and by the tests in a Node VM. */
+(function (root) {
+  'use strict';
+
+  var CAPACITY = 4;
+  var MAX_COLORS = 8;
+  var SAVE_KEY = 'rokumon-sort-v1';
+  var SESSION_KEY = 'rokumon-sort-session-v1';
+  var MAX_UNDO = 200;
+  var SAVED_UNDO = 60;
+
+  var PIGMENTS = [
+    { name: 'Akane', hex: '#E23B3B', deep: '#8C1E1E', hi: '#FF8A7A', mark: 'circle' },
+    { name: 'Kohaku', hex: '#EE7A12', deep: '#A84C08', hi: '#FFC087', mark: 'triangle' },
+    { name: 'Yamabuki', hex: '#F2D230', deep: '#B8960A', hi: '#FFF3A8', mark: 'diamond' },
+    { name: 'Midori', hex: '#1FA86A', deep: '#0C6A40', hi: '#8EEDC0', mark: 'square' },
+    { name: 'Ai', hex: '#3B73E8', deep: '#1A45A8', hi: '#A9C6FF', mark: 'plus' },
+    { name: 'Murasaki', hex: '#9A6BFF', deep: '#5C34C2', hi: '#D4C2FF', mark: 'star' },
+    { name: 'Sakura', hex: '#F25C9A', deep: '#B02864', hi: '#FFB3D0', mark: 'petal' },
+    { name: 'Sora', hex: '#1BB8D4', deep: '#0A7288', hi: '#9AEEF8', mark: 'wave' }
+  ];
+
+  /* Hand-built campaign. Tubes list pigments bottom to top. `par` is the BFS
+   * optimum, checked by test/core.test.js. */
+  var LEVELS = [
+    { id: 1, name: 'First Flame', par: 4, reveal: 4, tubes: [[0, 0, 0, 1], [1, 1, 1, 2], [2, 2, 2, 0], [], []] },
+    { id: 2, name: 'Twin Ash', par: 6, reveal: 4, tubes: [[0, 0, 1], [], [2, 2, 0, 1], [1], [2, 2, 0, 1]] },
+    { id: 3, name: 'Kiln Dust', par: 8, reveal: 4, tubes: [[0, 0, 2], [1, 1, 0, 2], [], [3, 1, 2, 0], [2], [3, 3, 3, 1]] },
+    { id: 4, name: 'River Ore', par: 7, reveal: 4, tubes: [[0, 3], [1, 1, 1, 2], [2, 2, 2, 1], [3], [3], [0, 0, 0, 3]] },
+    { id: 5, name: 'Temple Ink', par: 11, reveal: 4, tubes: [[0, 0, 0, 2], [1, 1, 4, 3], [2, 2, 1, 4], [3, 0, 4], [4, 1, 3], [], [2, 3]] },
+    { id: 6, name: 'Cedar Smoke', par: 8, reveal: 4, tubes: [[3, 3, 3, 1], [1], [2, 1], [1], [4, 4, 4, 0], [0, 0, 0, 4], [2, 2, 2, 3]] },
+    { id: 7, name: 'Copper Bell', par: 9, reveal: 2, tubes: [[0], [1, 1, 1, 2], [2, 0], [3, 3, 3, 2], [0], [4, 4, 4, 1], [4, 2, 3, 0]] },
+    { id: 8, name: 'Moon Lacquer', par: 10, reveal: 2, tubes: [[0, 0, 4, 3], [1, 1, 1, 5], [2, 2, 0], [3, 0], [4, 4, 3], [4, 2, 2, 1], [5, 5, 5, 3], []] },
+    { id: 9, name: 'Fifth Gate', par: 12, reveal: 2, tubes: [[0, 0, 0, 4], [1, 3], [2, 2, 2, 4], [3], [4, 1, 5, 3], [5, 5, 5, 1], [0, 2, 1, 4], [3]] },
+    { id: 10, name: 'Hidden Seam', par: 12, reveal: 2, tubes: [[0, 0, 0, 2], [1, 1, 2], [], [3, 3, 1, 5], [4, 3, 0, 5], [2], [4, 4, 4, 3], [1, 5, 5, 2]] },
+    { id: 11, name: 'Violet Kiln', par: 12, reveal: 2, tubes: [[], [1, 4, 4, 1], [2, 2, 2, 1], [0], [4, 4, 2, 5], [5, 5, 5, 3], [0, 3, 0], [3, 1, 3, 0]] },
+    { id: 12, name: 'Storm Glass', par: 16, reveal: 2, tubes: [[0, 4, 0, 2], [1, 5, 0, 5], [2, 0, 5], [3, 2, 2, 1], [4, 6, 1], [5, 1], [6, 6, 6, 4], [3, 3, 3, 4], []] },
+    { id: 13, name: 'Sealed Pigment', par: 11, reveal: 1, tubes: [[0, 2, 5], [5], [2, 2, 2, 6], [3, 3, 3, 5], [4, 4, 4, 1], [], [6, 6, 3, 5], [1, 1, 1, 4], [0, 0, 0, 6]] },
+    { id: 14, name: 'Night Market', par: 13, reveal: 1, tubes: [[4, 4, 4, 1], [1, 0, 0, 3], [2, 2, 6, 5], [3, 3, 3, 1], [4, 1, 5], [5], [0, 0, 2, 6], [6, 6, 2, 5]] },
+    { id: 15, name: 'Eight Banners', par: 14, reveal: 1, tubes: [[0, 0, 0, 1], [4, 4, 4, 1], [2, 6, 6, 5], [3, 3, 5, 2], [], [], [6, 6, 3, 1], [5, 2, 2, 3], [4, 5, 1, 0]] },
+    { id: 16, name: 'Forge Whisper', par: 17, reveal: 1, tubes: [[0, 3], [1, 0, 2], [2, 2, 4, 3], [], [4, 3, 0, 2], [5, 5, 4, 7], [6, 6, 3], [7, 7, 7, 0], [5, 5, 4, 6], [1, 1, 1, 6]] },
+    { id: 17, name: 'Last Empty', par: 17, reveal: 1, tubes: [[], [1, 6, 1], [2, 2, 0], [3, 3, 3, 4], [5, 5, 0, 1], [5, 5, 2, 0], [6, 6, 6, 4], [7, 7, 7, 4], [7, 4, 0], [1, 3, 2]] },
+    { id: 18, name: 'Crucible', par: 15, reveal: 1, tubes: [[0, 4, 1, 2], [1, 1, 5, 2], [2, 3], [3, 3], [4, 4, 4, 0], [5, 5, 7, 5], [6, 0, 2, 3], [7, 7, 7, 1], [6, 6, 6, 0]] },
+    { id: 19, name: "Daimyo's Set", par: 15, reveal: 1, tubes: [[0, 5], [1, 1, 2, 5], [2, 2, 0, 1], [3, 3, 0, 2], [4, 4, 4, 0], [5], [6, 6, 6, 3], [7, 7, 6, 4], [5], [7, 7, 1, 3]] },
+    { id: 20, name: 'The Sixth Gate', par: 14, reveal: 1, tubes: [[0, 0, 0, 3], [1, 6, 6, 3], [2, 2, 2, 1], [3, 3, 7, 5], [4], [5, 5, 4], [6, 6, 0, 4], [7, 1, 1, 2], [7, 7, 4, 5]] }
+  ];
+
+  /* ---------- rules ---------- */
+
+  function cloneTubes(tubes) { return tubes.map(function (t) { return t.slice(); }); }
+
+  function isSealed(tube) {
+    if (tube.length !== CAPACITY) return false;
+    for (var i = 1; i < tube.length; i++) if (tube[i] !== tube[0]) return false;
+    return true;
+  }
+
+  function isSolved(tubes) {
+    for (var i = 0; i < tubes.length; i++) if (tubes[i].length && !isSealed(tubes[i])) return false;
+    return true;
+  }
+
+  function topRun(tube) {
+    if (!tube.length) return null;
+    var color = tube[tube.length - 1];
+    var count = 1;
+    for (var i = tube.length - 2; i >= 0 && tube[i] === color; i--) count++;
+    return { color: color, count: count };
+  }
+
+  /** The pour from `from` to `to`, or null when it is not allowed. */
+  function legalPour(tubes, from, to) {
+    if (!Array.isArray(tubes) || !Number.isInteger(from) || !Number.isInteger(to)) return null;
+    if (from === to || from < 0 || to < 0 || from >= tubes.length || to >= tubes.length) return null;
+    var src = tubes[from];
+    var dst = tubes[to];
+    if (!src.length || isSealed(src) || dst.length >= CAPACITY) return null;
+    var run = topRun(src);
+    if (dst.length && dst[dst.length - 1] !== run.color) return null;
+    return { from: from, to: to, amount: Math.min(run.count, CAPACITY - dst.length), color: run.color };
+  }
+
+  /** Returns a new rack with `move.amount` measures moved from the top of `from` to `to`. */
+  function applyPour(tubes, move) {
+    var next = cloneTubes(tubes);
+    var poured = next[move.from].splice(next[move.from].length - move.amount, move.amount);
+    for (var i = 0; i < poured.length; i++) next[move.to].push(poured[i]);
+    return next;
+  }
+
+  function legalMoves(tubes) {
+    var out = [];
+    for (var f = 0; f < tubes.length; f++) {
+      for (var t = 0; t < tubes.length; t++) {
+        var mv = legalPour(tubes, f, t);
+        if (mv) out.push(mv);
+      }
+    }
+    return out;
+  }
+
+  function stateKey(tubes) {
+    return tubes.map(function (t) { return t.join(''); }).sort().join('|');
+  }
+
+  function isStuck(tubes) { return !isSolved(tubes) && legalMoves(tubes).length === 0; }
+
+  /* The solver works on tubes encoded as digit strings ("0012"), which is far
+   * cheaper to copy, compare and hash than nested arrays. */
+  function strSealed(s) { return s.length === CAPACITY && s[0] === s[1] && s[1] === s[2] && s[2] === s[3]; }
+  function strSolved(st) {
+    for (var i = 0; i < st.length; i++) if (st[i].length && !strSealed(st[i])) return false;
+    return true;
+  }
+  function strKey(st) { return st.slice().sort().join('|'); }
+
+  /** Breadth-first search. status is 'solved' (with the shortest move list),
+   * 'unsolvable' (every reachable rack searched) or 'limit' (gave up).
+   * Pours that only relabel tubes are skipped: a one-colour tube into an empty
+   * tube, and any pour into an empty tube other than the first empty one. */
+  function solve(start, limit) {
+    var cap = limit || 50000;
+    if (isSolved(start)) return { status: 'solved', moves: [], nodes: 1 };
+    var first = start.map(function (t) { return t.join(''); });
+    var states = [first];
+    var parents = [-1];
+    var via = [null];
+    var seen = new Set([strKey(first)]);
+    for (var i = 0; i < states.length; i++) {
+      if (states.length > cap) return { status: 'limit', nodes: states.length };
+      var st = states[i];
+      var firstEmpty = -1;
+      for (var e = 0; e < st.length; e++) if (!st[e].length) { firstEmpty = e; break; }
+      for (var f = 0; f < st.length; f++) {
+        var s = st[f];
+        if (!s.length || strSealed(s)) continue;
+        var c = s[s.length - 1];
+        var run = 1;
+        while (run < s.length && s[s.length - 1 - run] === c) run++;
+        var uniform = run === s.length;
+        for (var t = 0; t < st.length; t++) {
+          if (t === f) continue;
+          var d = st[t];
+          if (!d.length) { if (uniform || t !== firstEmpty) continue; }
+          else if (d.length >= CAPACITY || d[d.length - 1] !== c) continue;
+          var amount = Math.min(run, CAPACITY - d.length);
+          var next = st.slice();
+          next[f] = s.slice(0, s.length - amount);
+          next[t] = d + s.slice(s.length - amount);
+          var key = strKey(next);
+          if (seen.has(key)) continue;
+          seen.add(key);
+          states.push(next);
+          parents.push(i);
+          via.push({ from: f, to: t, amount: amount, color: Number(c) });
+          if (strSolved(next)) {
+            var path = [];
+            for (var j = states.length - 1; j > 0; j = parents[j]) path.push(via[j]);
+            path.reverse();
+            return { status: 'solved', moves: path, nodes: states.length };
+          }
+        }
+      }
+    }
+    return { status: 'unsolvable', nodes: states.length };
+  }
+
+  function disorder(tubes) {
+    var colors = new Set();
+    var runs = 0;
+    for (var i = 0; i < tubes.length; i++) {
+      for (var j = 0; j < tubes[i].length; j++) {
+        colors.add(tubes[i][j]);
+        if (j === 0 || tubes[i][j] !== tubes[i][j - 1]) runs++;
+      }
+    }
+    return runs - colors.size;
+  }
+
+  /** A hint for the current rack: { move, proven } or { unsolvable: true } or null. */
+  function findHint(tubes, limit) {
+    var all = legalMoves(tubes);
+    if (!all.length) return null;
+    var res = solve(tubes, limit || 25000);
+    if (res.status === 'solved' && res.moves.length) return { move: res.moves[0], proven: true };
+    if (res.status === 'unsolvable') return { unsolvable: true };
+    var best = all[0];
+    var bestScore = Infinity;
+    for (var i = 0; i < all.length; i++) {
+      var next = applyPour(tubes, all[i]);
+      var score = disorder(next) - (isSealed(next[all[i].to]) ? 0.6 : 0) - all[i].amount * 0.01;
+      if (score < bestScore) { bestScore = score; best = all[i]; }
+    }
+    return { move: best, proven: false };
+  }
+
+  /* ---------- generation ---------- */
+
+  function mulberry32(seed) {
+    var a = seed >>> 0;
+    return function () {
+      a = (a + 0x6D2B79F5) | 0;
+      var t = Math.imul(a ^ (a >>> 15), 1 | a);
+      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+
+  function solvedRack(colors, empties) {
+    var out = [];
+    for (var c = 0; c < colors; c++) out.push([c, c, c, c]);
+    for (var e = 0; e < empties; e++) out.push([]);
+    return out;
+  }
+
+  /* Reverse pours. Each one undoes a forward pour that the rules allow, so a
+   * rack built from these is solvable by replaying them backwards. */
+  function unpourMoves(tubes) {
+    var out = [];
+    for (var y = 0; y < tubes.length; y++) {
+      var src = tubes[y];
+      if (!src.length) continue;
+      var run = topRun(src);
+      for (var x = 0; x < tubes.length; x++) {
+        if (x === y) continue;
+        var dst = tubes[x];
+        if (dst.length >= CAPACITY) continue;
+        if (dst.length && dst[dst.length - 1] === run.color) continue;
+        var max = Math.min(run.count, CAPACITY - dst.length);
+        for (var k = 1; k <= max; k++) {
+          if (k < run.count || k === src.length) out.push({ from: y, to: x, amount: k, color: run.color });
+        }
+      }
+    }
+    return out;
+  }
+
+  function scramble(colors, empties, steps, rng) {
+    var tubes = solvedRack(colors, empties);
+    var reverse = [];
+    var prevKey = '';
+    for (var s = 0; s < steps; s++) {
+      var curKey = stateKey(tubes);
+      var options = unpourMoves(tubes).filter(function (m) {
+        var k = stateKey(applyPour(tubes, m));
+        return k !== prevKey && k !== curKey;
+      });
+      if (!options.length) break;
+      var filled = options.filter(function (m) { return tubes[m.to].length > 0; });
+      var pool = filled.length && rng() < 0.86 ? filled : options;
+      var mv = pool[Math.floor(rng() * pool.length)];
+      prevKey = curKey;
+      tubes = applyPour(tubes, mv);
+      reverse.push(mv);
+    }
+    var solution = reverse.slice().reverse().map(function (m) {
+      return { from: m.to, to: m.from, amount: m.amount, color: m.color };
+    });
+    return { tubes: tubes, solution: solution };
+  }
+
+  function mixedCount(tubes) {
+    return tubes.filter(function (t) { return new Set(t).size > 1; }).length;
+  }
+
+  function stageShape(stage) {
+    return {
+      colors: Math.min(MAX_COLORS, 3 + Math.floor((stage - 1) / 2)),
+      empties: stage >= 14 ? 1 : 2,
+      steps: 8 + stage * 3,
+      reveal: stage < 5 ? 4 : stage < 10 ? 2 : 1
+    };
+  }
+
+  /** A Night Pour rack. Always solvable (reverse-pour construction), never
+   * already solved, and always has at least one legal pour. */
+  function generateRack(stage, rng) {
+    var shape = stageShape(stage);
+    var pick = null;
+    var fallback = null;
+    for (var attempt = 0; attempt < 60 && !pick; attempt++) {
+      var r = scramble(shape.colors, shape.empties, shape.steps + attempt * 2, rng);
+      if (isSolved(r.tubes) || !legalMoves(r.tubes).length) continue;
+      if (!fallback) fallback = r;
+      if (mixedCount(r.tubes) >= 2 && !r.tubes.some(isSealed)) pick = r;
+    }
+    pick = pick || fallback;
+    if (!pick) {
+      var lvl = LEVELS[Math.min(LEVELS.length - 1, Math.max(0, stage - 1))];
+      var res = solve(lvl.tubes, 80000);
+      return { tubes: cloneTubes(lvl.tubes), par: lvl.par, parProven: true, reveal: lvl.reveal, colors: countColors(lvl.tubes), solution: res.moves || [] };
+    }
+    var solved = solve(pick.tubes, shape.colors >= 7 ? 20000 : 40000);
+    var proven = solved.status === 'solved';
+    return {
+      tubes: pick.tubes,
+      par: proven ? solved.moves.length : pick.solution.length,
+      parProven: proven,
+      reveal: shape.reveal,
+      colors: shape.colors,
+      solution: pick.solution
+    };
+  }
+
+  function countColors(tubes) {
+    var s = new Set();
+    tubes.forEach(function (t) { t.forEach(function (c) { s.add(c); }); });
+    return s.size;
+  }
+
+  /* ---------- scoring ---------- */
+
+  function starsFor(moves, par) {
+    if (moves <= par) return 3;
+    if (moves <= par + Math.max(2, Math.ceil(par * 0.5))) return 2;
+    return 1;
+  }
+  function levelScore(moves, par, stars) { return stars * 500 + Math.max(0, par * 40 - moves * 25); }
+  function stageScore(stage, moves, par, stars) { return 100 + stage * 15 + stars * 80 + Math.max(0, (par + 4 - moves) * 12); }
+
+  /* ---------- saved data ---------- */
+
+  function isInt(v, min, max) { return typeof v === 'number' && Number.isInteger(v) && v >= min && v <= max; }
+  function isPlainObject(v) { return !!v && typeof v === 'object' && !Array.isArray(v); }
+
+  function defaultSave() {
+    return { version: 1, unlocked: 1, best: {}, endlessBest: 0, sound: true, seenHelp: false };
+  }
+
+  /** Accepts anything (parsed JSON or garbage). Returns a valid save; bad
+   * fields fall back to defaults rather than crashing or showing junk. */
+  function sanitizeSave(raw) {
+    var out = defaultSave();
+    if (!isPlainObject(raw) || raw.version !== 1) return out;
+    if (isInt(raw.unlocked, 1, LEVELS.length)) out.unlocked = raw.unlocked;
+    if (isPlainObject(raw.best)) {
+      for (var i = 0; i < LEVELS.length; i++) {
+        var id = String(LEVELS[i].id);
+        if (!Object.prototype.hasOwnProperty.call(raw.best, id)) continue;
+        var b = raw.best[id];
+        if (isPlainObject(b) && isInt(b.moves, 1, 99999) && isInt(b.stars, 1, 3) && isInt(b.score, 0, 10000)) {
+          out.best[id] = { moves: b.moves, stars: b.stars, score: b.score };
+          if (LEVELS[i].id + 1 > out.unlocked && LEVELS[i].id < LEVELS.length) out.unlocked = LEVELS[i].id + 1;
+        }
+      }
+    }
+    if (isInt(raw.endlessBest, 0, 1e9)) out.endlessBest = raw.endlessBest;
+    if (typeof raw.sound === 'boolean') out.sound = raw.sound;
+    if (typeof raw.seenHelp === 'boolean') out.seenHelp = raw.seenHelp;
+    return out;
+  }
+
+  function totalScore(save) {
+    var sum = 0;
+    for (var k in save.best) if (Object.prototype.hasOwnProperty.call(save.best, k)) sum += save.best[k].score;
+    return sum;
+  }
+  function totalStars(save) {
+    var sum = 0;
+    for (var k in save.best) if (Object.prototype.hasOwnProperty.call(save.best, k)) sum += save.best[k].stars;
+    return sum;
+  }
+
+  /** A rack is valid when it has 3 to 12 tubes of at most four measures, every
+   * pigment index is 0..7, and every pigment present appears exactly 4 times. */
+  function isValidRack(tubes) {
+    if (!Array.isArray(tubes) || tubes.length < 3 || tubes.length > 12) return false;
+    var counts = {};
+    for (var i = 0; i < tubes.length; i++) {
+      var t = tubes[i];
+      if (!Array.isArray(t) || t.length > CAPACITY) return false;
+      for (var j = 0; j < t.length; j++) {
+        if (!isInt(t[j], 0, MAX_COLORS - 1)) return false;
+        counts[t[j]] = (counts[t[j]] || 0) + 1;
+      }
+    }
+    var keys = Object.keys(counts);
+    if (!keys.length) return false;
+    return keys.every(function (k) { return counts[k] === CAPACITY; });
+  }
+
+  function sameContents(a, b) {
+    if (a.length !== b.length) return false;
+    var flat = function (r) { return r.reduce(function (acc, t) { return acc.concat(t); }, []).sort().join(','); };
+    return flat(a) === flat(b);
+  }
+
+  /** Validates a stored in-progress rack. Returns a clean session or null. */
+  function sanitizeSession(raw, save) {
+    if (!isPlainObject(raw) || raw.v !== 1) return null;
+    var base;
+    var out;
+    if (raw.kind === 'campaign') {
+      if (!isInt(raw.id, 1, LEVELS.length) || raw.id > save.unlocked) return null;
+      base = LEVELS[raw.id - 1].tubes;
+      out = { v: 1, kind: 'campaign', id: raw.id };
+    } else if (raw.kind === 'endless') {
+      if (!isInt(raw.stage, 1, 999) || !isInt(raw.seed, 0, 4294967295)) return null;
+      if (!isInt(raw.score, 0, 1e9) || !isInt(raw.stageBase, 0, 1e9) || raw.stageBase > raw.score) return null;
+      if (!isInt(raw.startedAt, 0, 1e15)) return null;
+      out = { v: 1, kind: 'endless', stage: raw.stage, seed: raw.seed, score: raw.score, stageBase: raw.stageBase, startedAt: raw.startedAt };
+      if (raw.tubes === null || raw.tubes === undefined) { out.tubes = null; return out; }
+      base = generateRack(raw.stage, mulberry32(endlessSeed(raw.seed, raw.stage))).tubes;
+    } else {
+      return null;
+    }
+    if (!isValidRack(raw.tubes) || raw.tubes.length !== base.length || !sameContents(raw.tubes, base)) return null;
+    if (!isInt(raw.moves, 0, 99999) || !isInt(raw.hints, 0, 3)) return null;
+    out.tubes = cloneTubes(raw.tubes);
+    out.moves = raw.moves;
+    out.hints = raw.hints;
+    out.undo = [];
+    if (Array.isArray(raw.undo) && raw.undo.length <= MAX_UNDO) {
+      var okUndo = raw.undo.every(function (r) { return isValidRack(r) && r.length === base.length && sameContents(r, base); });
+      if (okUndo) out.undo = raw.undo.map(cloneTubes);
+    }
+    return out;
+  }
+
+  function endlessSeed(seed, stage) { return (seed + stage * 997) >>> 0; }
+
+  /* ---------- hub bridge contract ---------- */
+
+  /* Event names and property types this game emits over hub bridge v1.
+   * Names are kebab-case and properties camelCase primitives, as the hub's
+   * receiver (src/lib/bridge.ts in rokumon-games) requires. */
+  var EVENTS = {
+    'level-start': { mode: 'string', level: 'number', par: 'number', colors: 'number' },
+    'level-complete': { mode: 'string', level: 'number', moves: 'number', stars: 'number', par: 'number', levelScore: 'number', score: 'number' },
+    'hint-used': { mode: 'string', level: 'number', hintsLeft: 'number' },
+    'campaign-complete': { score: 'number', stars: 'number' },
+    'run-end': { score: 'number', stages: 'number', best: 'number', durationMs: 'number' }
+  };
+
+  /** Returns a copy of `data` if it matches the event's contract exactly, else null. */
+  function bridgeEventData(name, data) {
+    var contract = Object.prototype.hasOwnProperty.call(EVENTS, name) ? EVENTS[name] : null;
+    if (!contract || !isPlainObject(data)) return null;
+    var keys = Object.keys(contract);
+    if (Object.keys(data).length !== keys.length) return null;
+    var out = {};
+    for (var i = 0; i < keys.length; i++) {
+      var k = keys[i];
+      var v = data[k];
+      if (typeof v !== contract[k]) return null;
+      if (typeof v === 'number' && !Number.isFinite(v)) return null;
+      if (typeof v === 'string' && v.length > 160) return null;
+      out[k] = v;
+    }
+    return out;
+  }
+
+  var api = {
+    CAPACITY: CAPACITY, MAX_UNDO: MAX_UNDO, SAVED_UNDO: SAVED_UNDO, SAVE_KEY: SAVE_KEY, SESSION_KEY: SESSION_KEY,
+    PIGMENTS: PIGMENTS, LEVELS: LEVELS, EVENTS: EVENTS,
+    cloneTubes: cloneTubes, isSealed: isSealed, isSolved: isSolved, topRun: topRun,
+    legalPour: legalPour, applyPour: applyPour, legalMoves: legalMoves, stateKey: stateKey,
+    isStuck: isStuck, solve: solve, findHint: findHint,
+    mulberry32: mulberry32, unpourMoves: unpourMoves, generateRack: generateRack, stageShape: stageShape, endlessSeed: endlessSeed, countColors: countColors,
+    starsFor: starsFor, levelScore: levelScore, stageScore: stageScore,
+    defaultSave: defaultSave, sanitizeSave: sanitizeSave, sanitizeSession: sanitizeSession,
+    totalScore: totalScore, totalStars: totalStars, isValidRack: isValidRack,
+    bridgeEventData: bridgeEventData
+  };
+  root.RokumonSortCore = api;
+})(typeof window !== 'undefined' ? window : globalThis);
+</script>
+<script id="rs-ui">
+/* Rokumon Sort UI: rendering, input, audio, saving and the hub bridge. */
+(function () {
+  'use strict';
+  var Core = window.RokumonSortCore;
+  var GAME_ID = 'rokumon-sort';
+  var GAME_VERSION = '1.1.0';
+  var POUR_MS = 700;
+
+  /* ---------- small helpers ---------- */
+
+  function esc(s) {
+    return String(s).replace(/[&<>"']/g, function (c) {
+      return c === '&' ? '&amp;' : c === '<' ? '&lt;' : c === '>' ? '&gt;' : c === '"' ? '&quot;' : '&#39;';
+    });
+  }
+  function pigment(i) { return Core.PIGMENTS[i] || Core.PIGMENTS[0]; }
+  function smooth(a, b, x) {
+    if (x <= a) return 0;
+    if (x >= b) return 1;
+    var t = (x - a) / (b - a);
+    return t * t * (3 - 2 * t);
+  }
+  function reducedMotion() {
+    try { return window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) { return false; }
+  }
+
+  /* ---------- storage (every access guarded: sandboxed frames can throw) ---------- */
+
+  function readJSON(key) {
+    try {
+      var raw = window.localStorage.getItem(key);
+      return raw ? JSON.parse(raw) : null;
+    } catch (e) { return null; }
+  }
+  function writeJSON(key, value) {
+    try { window.localStorage.setItem(key, JSON.stringify(value)); } catch (e) { /* storage full or blocked */ }
+  }
+  function removeKey(key) {
+    try { window.localStorage.removeItem(key); } catch (e) { /* blocked */ }
+  }
+
+  /* ---------- hub bridge v1 ----------
+   * Uses window.Hub when the page has one (hub-bridge.js), otherwise posts the
+   * same v1 messages to the parent frame, same origin only. Standalone play
+   * (no parent frame) sends nothing. A failing bridge never breaks the game. */
+  function hubObject() {
+    var h = window.Hub;
+    return h && typeof h === 'object' ? h : null;
+  }
+  function post(msg) {
+    try {
+      if (window.parent === window) return;
+      window.parent.postMessage(msg, window.location.origin);
+    } catch (e) { /* opaque origin (file://, sandbox) or detached frame */ }
+  }
+  function callHub(method, args, fallback) {
+    var h = hubObject();
+    if (h) {
+      if (typeof h[method] === 'function') {
+        try { h[method].apply(h, args); } catch (e) { /* ignore */ }
+      }
+      return;
+    }
+    post(fallback);
+  }
+  var hub = {
+    ready: function () { callHub('ready', [], { type: 'hub:ready', version: 1 }); },
+    score: function (score) {
+      if (typeof score !== 'number' || !isFinite(score)) return;
+      callHub('score', [score], { type: 'hub:score', score: score });
+    },
+    gameOver: function (score, durationMs) {
+      if (typeof score !== 'number' || !isFinite(score)) return;
+      var msg = { type: 'hub:gameover', score: score };
+      if (typeof durationMs === 'number' && isFinite(durationMs)) msg.durationMs = durationMs;
+      callHub('gameOver', [score, msg.durationMs], msg);
+    },
+    event: function (name, data) {
+      var clean = Core.bridgeEventData(name, data);
+      if (!clean) return;
+      callHub('event', [name, clean], { type: 'hub:event', version: 1, name: name, data: clean });
+    }
+  };
+
+  /* ---------- audio (Web Audio, synthesised, nothing downloaded) ---------- */
+
+  var actx = null;
+  var master = null;
+  var noise = null;
+  var muted = false;
+
+  function setMuted(m) {
+    muted = m;
+    if (master && actx) master.gain.setTargetAtTime(m ? 0 : 0.85, actx.currentTime, 0.02);
+  }
+  function unlockAudio() {
+    if (muted) return;
+    var Ctor = window.AudioContext || window.webkitAudioContext;
+    if (!Ctor) return;
+    try {
+      if (!actx) {
+        actx = new Ctor({ latencyHint: 'interactive' });
+        master = actx.createGain();
+        master.gain.value = muted ? 0 : 0.85;
+        master.connect(actx.destination);
+        noise = actx.createBuffer(1, Math.floor(actx.sampleRate * 0.4), actx.sampleRate);
+        var data = noise.getChannelData(0);
+        for (var i = 0; i < data.length; i++) data[i] = Math.random() * 2 - 1;
+      }
+      if (actx.state === 'suspended') actx.resume();
+    } catch (e) { actx = null; }
+  }
+  function envelope(peak, dur) {
+    var g = actx.createGain();
+    var t = actx.currentTime;
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.exponentialRampToValueAtTime(Math.max(0.0002, peak), t + 0.02);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    g.connect(master);
+    return g;
+  }
+  function tone(freq, dur, type, peak, glide) {
+    if (!actx || !master || muted) return;
+    try {
+      var g = envelope(peak, dur);
+      var o = actx.createOscillator();
+      o.type = type;
+      o.frequency.setValueAtTime(freq, actx.currentTime);
+      if (glide) o.frequency.exponentialRampToValueAtTime(Math.max(40, glide), actx.currentTime + dur * 0.9);
+      o.connect(g);
+      o.start();
+      o.stop(actx.currentTime + dur + 0.02);
+    } catch (e) { /* ignore */ }
+  }
+  var sfx = {
+    click: function () { tone(620, 0.07, 'sine', 0.04, 880); },
+    select: function () { tone(480, 0.06, 'triangle', 0.045, 720); },
+    deny: function () { tone(180, 0.12, 'square', 0.03, 110); },
+    pour: function (color) {
+      if (!actx || !master || !noise || muted) return;
+      tone(420 + color * 28, 0.32, 'sine', 0.05, 140 + color * 8);
+      try {
+        var src = actx.createBufferSource();
+        src.buffer = noise;
+        var f = actx.createBiquadFilter();
+        f.type = 'bandpass';
+        f.frequency.value = 540 + color * 40;
+        f.Q.value = 0.7;
+        src.connect(f);
+        f.connect(envelope(0.045, 0.28));
+        src.start();
+        src.stop(actx.currentTime + 0.3);
+      } catch (e) { /* ignore */ }
+    },
+    seal: function () {
+      tone(523, 0.12, 'sine', 0.05, 784);
+      window.setTimeout(function () { tone(784, 0.16, 'triangle', 0.04, 1046); }, 70);
+    },
+    win: function () {
+      [523, 659, 784, 1046].forEach(function (f, i) {
+        window.setTimeout(function () { tone(f, 0.22, 'triangle', 0.05); }, i * 110);
+      });
+    }
+  };
+
+  /* ---------- icons ---------- */
+
+  function starSvg(on, size) {
+    return '<svg viewBox="0 0 16 16" width="' + size + '" height="' + size + '" aria-hidden="true"><path d="M8 1.6 9.8 6h4.6l-3.7 2.8 1.4 4.6L8 10.8 3.9 13.4 5.3 8.8 1.6 6h4.6Z" fill="' +
+      (on ? '#e0a24a' : 'none') + '" stroke="' + (on ? '#e0a24a' : '#8a7d6f') + '" stroke-width="1" stroke-linejoin="round"/></svg>';
+  }
+  function starsHtml(n, big) {
+    var size = big ? 28 : 12;
+    return '<span class="' + (big ? 'rs-bigstars' : 'rs-stars') + '" aria-hidden="true">' +
+      [0, 1, 2].map(function (i) { return starSvg(i < n, size); }).join('') + '</span>';
+  }
+  function icon(paths) {
+    return '<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">' + paths + '</svg>';
+  }
+  var ICONS = {
+    back: icon('<path d="M15 5 8 12l7 7"/><path d="M9 12h10"/>'),
+    undo: icon('<path d="M8 8 4 12l4 4"/><path d="M4 12h10a6 6 0 1 1 0 6"/>'),
+    restart: icon('<path d="M20 12a8 8 0 1 1-2.2-5.5"/><path d="M20 4v6h-6"/>'),
+    hint: icon('<path d="M12 3a6 6 0 0 0-3 11v2h6v-2a6 6 0 0 0-3-11Z"/><path d="M10 19h4"/><path d="M10 21h4"/>'),
+    pause: icon('<path d="M9 5v14"/><path d="M15 5v14"/>')
+  };
+  function markSvg(mark) {
+    var a = 'stroke="#1a120c" stroke-width="1.6" fill="none" stroke-linejoin="round" stroke-linecap="round"';
+    switch (mark) {
+      case 'circle': return '<circle cx="8" cy="8" r="4" ' + a + '/>';
+      case 'triangle': return '<path d="M8 2.8 13.2 13H2.8Z" ' + a + '/>';
+      case 'diamond': return '<path d="M8 2.2 13.2 8 8 13.8 2.8 8Z" ' + a + '/>';
+      case 'square': return '<rect x="3.4" y="3.4" width="9.2" height="9.2" rx="1" ' + a + '/>';
+      case 'plus': return '<path d="M8 3.2v9.6M3.2 8h9.6" ' + a + '/>';
+      case 'star': return '<path d="M8 2.2 9.5 6h4L10.6 8.3 11.8 12 8 9.7 4.2 12l1.2-3.7L2.5 6h4Z" ' + a + '/>';
+      case 'petal': return '<path d="M8 13s4-2.2 4-5.2A4 4 0 0 0 8 4a4 4 0 0 0-4 3.8C4 10.8 8 13 8 13Z" ' + a + '/>';
+      case 'wave': return '<path d="M2 8c1.4-1.6 2.2-1.6 3.6 0S7.8 9.6 9.2 8 11.4 6.4 12.8 8 15 9.6 15 9.6" ' + a + '/>';
+      default: return '<circle cx="8" cy="8" r="3" ' + a + '/>';
+    }
+  }
+  var HIDDEN_MARK = '<circle cx="8" cy="8" r="2.4" fill="none" stroke="#d9cbb8" stroke-width="1.4"/>';
+  function crestSvg() {
+    var dots = [[40, 26, '#E23B3B'], [53, 34, '#EE7A12'], [53, 50, '#F2D230'], [40, 58, '#1FA86A'], [27, 50, '#3B73E8'], [27, 34, '#9A6BFF']];
+    return '<svg class="rs-crest" viewBox="0 0 80 80" aria-hidden="true">' +
+      '<polygon points="40,6 70,23 70,57 40,74 10,57 10,23" fill="none" stroke="#e0a24a" stroke-width="2"/>' +
+      '<polygon points="40,16 60,28 60,52 40,64 20,52 20,28" fill="none" stroke="rgba(224,162,74,0.35)" stroke-width="1"/>' +
+      dots.map(function (d) { return '<circle cx="' + d[0] + '" cy="' + d[1] + '" r="4.2" fill="' + d[2] + '"/>'; }).join('') +
+      '</svg>';
+  }
+
+  /* ---------- state ---------- */
+
+  var save = Core.sanitizeSave(readJSON(Core.SAVE_KEY));
+  setMuted(!save.sound);
+
+  var screen = 'menu';          // menu | select | play
+  var overlay = save.seenHelp ? null : 'help';  // null | help | pause
+  var helpFromPause = false;
+  var mode = { kind: 'campaign', id: 1 };
+  var level = null;
+  var rafId = 0;
+  var shakeTimer = 0;
+  var hintTimer = 0;
+  var checkTimer = 0;
+  var liveFlip = false;
+
+  var app = document.getElementById('app');
+  app.innerHTML = '<main class="rs"><div class="rs-view"></div><div class="rs-overlay"></div>' +
+    '<p class="rs-live" role="status" aria-live="polite" aria-atomic="true"></p></main>';
+  var rootEl = app.firstChild;
+  var viewEl = rootEl.querySelector('.rs-view');
+  var overlayEl = rootEl.querySelector('.rs-overlay');
+  var liveEl = rootEl.querySelector('.rs-live');
+
+  function announce(msg) {
+    liveFlip = !liveFlip;
+    liveEl.textContent = msg + (liveFlip ? ' ' : '');
+  }
+  function persist() { writeJSON(Core.SAVE_KEY, save); }
+
+  function newLevel(o) {
+    return {
+      name: o.name, subtitle: o.subtitle, tubes: o.tubes, initial: Core.cloneTubes(o.initial || o.tubes),
+      reveal: o.reveal, par: o.par, colors: o.colors, moves: o.moves || 0, hints: o.hints == null ? 3 : o.hints,
+      undo: o.undo || [], selected: null, cursor: 0, hint: null, shake: null, won: false, anim: null,
+      result: null, coach: !!o.coach, status: null
+    };
+  }
+
+  /* ---------- in-progress session (so a reload resumes the rack) ---------- */
+
+  function saveSession() {
+    if (!level || screen !== 'play') return;
+    var undo = level.undo.slice(-Core.SAVED_UNDO);
+    if (mode.kind === 'campaign') {
+      if (level.won) { removeKey(Core.SESSION_KEY); return; }
+      writeJSON(Core.SESSION_KEY, { v: 1, kind: 'campaign', id: mode.id, tubes: level.tubes, moves: level.moves, hints: level.hints, undo: undo });
+    } else {
+      var base = { v: 1, kind: 'endless', seed: mode.seed, startedAt: mode.startedAt };
+      if (level.won) {
+        // Cleared: a reload continues with the next stage.
+        base.stage = mode.stage + 1; base.score = mode.score; base.stageBase = mode.score; base.tubes = null;
+      } else {
+        base.stage = mode.stage; base.score = mode.score; base.stageBase = mode.stageBase;
+        base.tubes = level.tubes; base.moves = level.moves; base.hints = level.hints; base.undo = undo;
+      }
+      writeJSON(Core.SESSION_KEY, base);
+    }
+  }
+  function clearSession() { removeKey(Core.SESSION_KEY); }
+
+  /* ---------- rendering ---------- */
+
+  function menuHtml() {
+    return '<section class="rs-screen"><div class="rs-menu">' +
+      '<div class="rs-hero">' + crestSvg() +
+      '<p class="rs-kicker">Rokumon Games</p>' +
+      '<h1 class="rs-display">Rokumon Sort</h1>' +
+      '<p class="rs-sub">Pour the forge pigments until every crystal vial holds a single sealed colour.</p></div>' +
+      '<div class="rs-actions">' +
+      '<button class="rs-btn primary" data-act="campaign" data-fk="campaign">Campaign</button>' +
+      '<button class="rs-btn" data-act="endless" data-fk="endless">Night Pour</button>' +
+      '<button class="rs-btn ghost" data-act="help" data-fk="help">How to pour</button>' +
+      soundButton('sound') +
+      '</div>' +
+      '<div class="rs-meta"><span>' + Core.totalStars(save) + ' / 60 seals</span><span>Best run ' + save.endlessBest + '</span></div>' +
+      '</div></section>';
+  }
+  function soundButton(fk) {
+    return '<button class="rs-btn ghost" data-act="sound" data-fk="' + fk + '" aria-pressed="' + (save.sound ? 'true' : 'false') + '">' +
+      (save.sound ? 'Sound on' : 'Sound off') + '</button>';
+  }
+  function selectHtml() {
+    var gates = Core.LEVELS.map(function (l) {
+      var locked = l.id > save.unlocked;
+      var best = save.best[String(l.id)];
+      var label = 'Gate ' + l.id + ', ' + l.name + ', ' + (locked ? 'locked' : best ? best.stars + ' of 3 seals, best ' + best.moves + ' moves' : 'not cleared');
+      return '<button class="rs-gate' + (locked ? ' is-locked' : '') + (best ? ' is-done' : '') + '" data-act="gate" data-i="' + l.id +
+        '" data-fk="gate-' + l.id + '" aria-label="' + esc(label) + '"' + (locked ? ' disabled' : '') + '>' +
+        '<strong>' + l.id + '</strong><em>' + esc(l.name) + '</em>' + starsHtml(best ? best.stars : 0, false) + '</button>';
+    }).join('');
+    return '<section class="rs-screen"><div class="rs-select">' +
+      '<div class="rs-head"><button class="rs-iconbtn" data-act="menu" data-fk="menu" aria-label="Back to title">' + ICONS.back + '</button>' +
+      '<h2 class="rs-display">The Six Gates</h2></div>' +
+      '<div class="rs-grid">' + gates + '</div></div></section>';
+  }
+  function playHtml() {
+    if (!level) return '';
+    return '<section class="rs-screen"><div class="rs-play">' +
+      '<div class="rs-playhead">' +
+      '<button class="rs-iconbtn" data-act="back" data-fk="back" aria-label="' + (mode.kind === 'endless' ? 'Pause run' : 'Back to gates') + '">' + ICONS.back + '</button>' +
+      '<div class="rs-titles"><h2 class="rs-display">' + esc(level.name) + '</h2><p>' + esc(level.subtitle) + ' · par ' + level.par + '</p></div>' +
+      '<div class="rs-moves"><b data-moves>' + level.moves + '</b><span>Moves</span></div></div>' +
+      '<p class="rs-coach" data-coach></p>' +
+      '<div class="rs-board-wrap"><svg class="rs-stream" aria-hidden="true"></svg>' +
+      '<div class="rs-board" role="group" aria-label="Vials"></div></div>' +
+      '<div class="rs-tools">' +
+      '<button class="rs-tool" data-act="undo" data-fk="undo">' + ICONS.undo + '<span>Undo</span></button>' +
+      '<button class="rs-tool" data-act="restart" data-fk="restart">' + ICONS.restart + '<span>Restart</span></button>' +
+      '<button class="rs-tool" data-act="hint" data-fk="hint">' + ICONS.hint + '<span>Hint <b data-hints></b></span></button>' +
+      '<button class="rs-tool" data-act="pause" data-fk="pause">' + ICONS.pause + '<span>Pause</span></button>' +
+      '</div></div></section>';
+  }
+  function helpHtml() {
+    return '<div class="rs-modal" role="dialog" aria-modal="true" aria-labelledby="rs-help-title"><div class="rs-card">' +
+      '<p class="rs-kicker">At the forge</p><h3 id="rs-help-title" class="rs-display">How to pour</h3>' +
+      '<ol class="rs-rules">' +
+      '<li><b>1.</b> Each vial holds four measures.</li>' +
+      '<li><b>2.</b> Tap a source vial, then a target. On a keyboard, use the arrow keys or number keys to pick a vial and Enter to choose it.</li>' +
+      '<li><b>3.</b> Pour only onto the same top colour, or into an empty vial.</li>' +
+      '<li><b>4.</b> Only the top run of one colour moves, and only as far as there is room.</li>' +
+      '<li><b>5.</b> A full vial of one colour seals. Seal every colour.</li>' +
+      '<li><b>6.</b> Later gates hide deeper pigment until it reaches the top. Each colour also has its own seal mark.</li>' +
+      '</ol><div class="rs-actions"><button class="rs-btn primary" data-act="close-help" data-fk="close-help">' + (helpFromPause ? 'Back' : 'Begin') + '</button></div>' +
+      '</div></div>';
+  }
+  function pauseHtml() {
+    var endless = mode.kind === 'endless';
+    return '<div class="rs-modal" role="dialog" aria-modal="true" aria-labelledby="rs-pause-title"><div class="rs-card">' +
+      '<p class="rs-kicker">Held</p><h3 id="rs-pause-title" class="rs-display">Paused</h3><div class="rs-actions">' +
+      '<button class="rs-btn primary" data-act="resume" data-fk="resume">Resume</button>' +
+      '<button class="rs-btn" data-act="restart" data-fk="p-restart">' + (endless ? 'Restart stage' : 'Restart gate') + '</button>' +
+      '<button class="rs-btn ghost" data-act="help" data-fk="p-help">How to pour</button>' +
+      soundButton('p-sound') +
+      '<button class="rs-btn ghost" data-act="quit" data-fk="quit">' + (endless ? 'End run' : 'Leave gate') + '</button>' +
+      '</div></div></div>';
+  }
+  function winHtml() {
+    var r = level.result;
+    var endless = mode.kind === 'endless';
+    var finale = !endless && mode.id === Core.LEVELS.length;
+    var title = finale ? 'Sixth Gate' : endless ? 'Stage ' + mode.stage : level.name;
+    var line = finale ? 'The catalogue is sealed in ' + level.moves + ' moves.' :
+      level.moves + ' moves · par ' + level.par + '. ' + (r.improved ? 'A finer pour.' : 'Best ' + r.bestMoves + '.');
+    return '<div class="rs-modal" role="dialog" aria-modal="true" aria-labelledby="rs-win-title" aria-describedby="rs-win-desc"><div class="rs-card">' +
+      '<p class="rs-kicker">' + (endless ? 'Night Pour' : 'Gate clear') + '</p>' +
+      '<h3 id="rs-win-title" class="rs-display">' + esc(title) + '</h3>' + starsHtml(r.stars, true) +
+      '<div id="rs-win-desc"><p>' + r.stars + ' of 3 seals. ' + esc(line) + '</p>' +
+      '<p>' + (endless ? 'Run score ' + mode.score : 'Level score ' + r.score) + '</p></div>' +
+      '<div class="rs-actions">' +
+      (finale ? '' : '<button class="rs-btn primary" data-act="next" data-fk="next">' + (endless ? 'Next crucible' : 'Next gate') + '</button>') +
+      '<button class="rs-btn" data-act="replay" data-fk="replay">Pour again</button>' +
+      '<button class="rs-btn ghost" data-act="quit" data-fk="w-quit">' + (endless ? 'End run' : 'Level select') + '</button>' +
+      '</div></div></div>';
+  }
+  function overlayHtml() {
+    if (screen === 'play' && level && level.won && level.result) return winHtml();
+    if (overlay === 'help') return helpHtml();
+    if (overlay === 'pause' && screen === 'play') return pauseHtml();
+    return '';
+  }
+
+  /** Full render. Keeps keyboard focus on the same control when it survives,
+   * moves it into a dialog when one opens, and back out when it closes. */
+  function render(focusKey) {
+    var active = document.activeElement;
+    var keep = focusKey || (active && active.getAttribute && active.getAttribute('data-fk'));
+    var hadOverlay = !!overlayEl.firstChild;
+    viewEl.innerHTML = screen === 'menu' ? menuHtml() : screen === 'select' ? selectHtml() : playHtml();
+    overlayEl.innerHTML = overlayHtml();
+    var hasOverlay = !!overlayEl.firstChild;
+    if (hasOverlay) viewEl.setAttribute('inert', ''); else viewEl.removeAttribute('inert');
+    if (screen === 'play' && level) { buildBoard(); updateBoard(0); }
+    var target = null;
+    if (hasOverlay) {
+      target = (keep && overlayEl.querySelector('[data-fk="' + keep + '"]')) || overlayEl.querySelector('button');
+    } else if (keep) {
+      target = viewEl.querySelector('[data-fk="' + keep + '"]');
+      if (target && target.disabled) target = null;
+    }
+    if (!target && hadOverlay && !hasOverlay && screen === 'play' && level) target = vialEl(level.cursor);
+    if (!target && focusKey === undefined && !hasOverlay && hadOverlay) target = viewEl.querySelector('button:not([disabled])');
+    if (target) { try { target.focus({ preventScroll: true }); } catch (e) { target.focus(); } }
+  }
+
+  function boardEl() { return viewEl.querySelector('.rs-board'); }
+  function vialEl(i) { return viewEl.querySelector('.rs-vial[data-i="' + i + '"]'); }
+
+  function buildBoard() {
+    var board = boardEl();
+    if (!board) return;
+    var html = '';
+    for (var i = 0; i < level.tubes.length; i++) {
+      html += '<button class="rs-vial" data-act="vial" data-i="' + i + '" data-fk="vial-' + i + '">' +
+        '<span class="rs-neck"></span><span class="rs-body"><span class="rs-stack"></span><span class="rs-glass"></span></span>' +
+        '<span class="rs-index" aria-hidden="true">' + (i + 1) + '</span></button>';
+    }
+    board.innerHTML = html;
+    layoutBoard();
+  }
+
+  /** Balanced rows: as few rows as fit, then spread the vials evenly across them. */
+  function layoutBoard() {
+    var board = boardEl();
+    if (!board || !level) return;
+    var width = board.clientWidth || 320;
+    var maxCols = Math.max(3, Math.floor((width + 8) / (52 + 8)));
+    var n = level.tubes.length;
+    var rows = Math.ceil(n / maxCols);
+    board.style.setProperty('--cols', String(Math.ceil(n / rows)));
+  }
+
+  function splitLayers(cells, reveal) {
+    var out = [];
+    for (var i = 0; i < cells.length; i++) {
+      var f = cells[i].frac;
+      while (f > 0.02) {
+        var part = Math.min(1, f);
+        out.push({ color: cells[i].color, frac: part, hidden: false });
+        f -= part;
+      }
+    }
+    var depth = 0;
+    for (var j = out.length - 1; j >= 0; j--) {
+      out[j].hidden = depth >= reveal - 0.001;
+      depth += out[j].frac;
+    }
+    return out;
+  }
+  function frameLayers(t) {
+    var cells = level.tubes.map(function (tube) { return tube.map(function (c) { return { color: c, frac: 1 }; }); });
+    var a = level.anim;
+    if (a) {
+      var out = smooth(0.08, 0.62, t) * a.amount;
+      var inn = smooth(0.28, 0.92, t) * a.amount;
+      var src = cells[a.from];
+      for (var i = src.length - 1; i >= 0 && out > 0.001; i--) {
+        var take = Math.min(src[i].frac, out);
+        src[i].frac -= take;
+        out -= take;
+      }
+      cells[a.from] = src.filter(function (c) { return c.frac > 0.02; });
+      if (inn > 0.02) cells[a.to].push({ color: a.color, frac: inn });
+    }
+    return cells.map(function (c) { return splitLayers(c, level.reveal); });
+  }
+  function layersHtml(layers) {
+    return layers.map(function (l, i) {
+      var top = i === layers.length - 1 ? ' is-top' : '';
+      if (l.hidden) {
+        return '<span class="rs-layer is-hidden' + top + '" style="--frac:' + l.frac.toFixed(3) + '"><svg class="rs-mark" viewBox="0 0 16 16" aria-hidden="true">' + HIDDEN_MARK + '</svg></span>';
+      }
+      var p = pigment(l.color);
+      return '<span class="rs-layer' + top + '" style="--frac:' + l.frac.toFixed(3) + ';--hi:' + p.hi + ';--mid:' + p.hex + ';--deep:' + p.deep +
+        '"><svg class="rs-mark" viewBox="0 0 16 16" aria-hidden="true">' + markSvg(p.mark) + '</svg></span>';
+    }).join('');
+  }
+  function vialLabel(tube, i) {
+    var parts = ['Vial ' + (i + 1)];
+    if (Core.isSealed(tube)) parts.push('sealed ' + pigment(tube[0]).name);
+    else if (!tube.length) parts.push('empty');
+    else {
+      var run = Core.topRun(tube);
+      var visible = Math.min(run.count, level.reveal);
+      parts.push('top ' + (visible > 1 ? visible + ' ' : '') + pigment(run.color).name, tube.length + ' of 4');
+      if (tube.length > level.reveal) parts.push('deeper pigment hidden');
+    }
+    if (level.selected === i) parts.push('selected');
+    if (level.hint && level.hint.from === i) parts.push('hint: pour from here');
+    if (level.hint && level.hint.to === i) parts.push('hint: pour here');
+    return parts.join(', ');
+  }
+
+  /** Updates vials in place (no node replacement), so focus and taps survive animation frames. */
+  function updateBoard(t) {
+    if (!level) return;
+    var layers = frameLayers(t);
+    var a = level.anim;
+    var tilt = a ? Math.sin(Math.min(t / 0.8, 1) * Math.PI) * 32 * a.dir : 0;
+    for (var i = 0; i < level.tubes.length; i++) {
+      var el = vialEl(i);
+      if (!el) continue;
+      var tube = level.tubes[i];
+      var cls = 'rs-vial' + (level.selected === i ? ' is-selected' : '') + (level.cursor === i ? ' is-cursor' : '') +
+        (Core.isSealed(tube) ? ' is-sealed' : '') + (a && a.from === i ? ' is-anim' : '') + (level.shake === i ? ' is-shake' : '') +
+        (level.hint && level.hint.from === i ? ' is-hint-from' : '') + (level.hint && level.hint.to === i ? ' is-hint-to' : '');
+      if (el.className !== cls) el.className = cls;
+      el.style.setProperty('--tilt', (a && a.from === i ? tilt.toFixed(2) : '0') + 'deg');
+      el.tabIndex = level.cursor === i ? 0 : -1;
+      var label = vialLabel(tube, i);
+      if (el.getAttribute('aria-label') !== label) el.setAttribute('aria-label', label);
+      var html = layersHtml(layers[i]);
+      if (el._html !== html) { el._html = html; el.querySelector('.rs-stack').innerHTML = html; }
+    }
+    var stream = viewEl.querySelector('.rs-stream');
+    if (stream) stream.innerHTML = streamHtml(t);
+    updateHud();
+  }
+  function updateHud() {
+    var m = viewEl.querySelector('[data-moves]');
+    if (m) m.textContent = String(level.moves);
+    var hints = viewEl.querySelector('[data-hints]');
+    if (hints) hints.textContent = String(level.hints);
+    var busy = !!level.anim || level.won;
+    setDisabled('undo', busy || !level.undo.length);
+    setDisabled('hint', busy || level.hints <= 0 || level.status === 'stuck' || level.status === 'dead');
+    var coach = viewEl.querySelector('[data-coach]');
+    if (coach) {
+      var text = level.status === 'stuck' ? 'No pours left. Undo or restart.' :
+        level.status === 'dead' ? 'This rack can no longer be sealed. Undo or restart.' :
+        level.coach ? 'Tap a vial, then tap another. Matching colours pour. Empty vials accept anything.' : '';
+      coach.textContent = text;
+      coach.className = 'rs-coach' + (level.status ? ' is-warn' : '');
+    }
+  }
+  function setDisabled(act, off) {
+    var b = viewEl.querySelector('[data-act="' + act + '"]');
+    if (!b || b.disabled === off) return;
+    if (off && document.activeElement === b) {
+      var v = vialEl(level.cursor);
+      if (v) v.focus({ preventScroll: true });
+    }
+    b.disabled = off;
+  }
+  function streamHtml(t) {
+    if (!level || !level.anim) return '';
+    var alpha = smooth(0.12, 0.26, t) * (1 - smooth(0.74, 0.92, t));
+    if (alpha <= 0.02) return '';
+    var wrap = viewEl.querySelector('.rs-board-wrap');
+    var fromNeck = viewEl.querySelector('.rs-vial[data-i="' + level.anim.from + '"] .rs-neck');
+    var toNeck = viewEl.querySelector('.rs-vial[data-i="' + level.anim.to + '"] .rs-neck');
+    if (!wrap || !fromNeck || !toNeck) return '';
+    var w = wrap.getBoundingClientRect();
+    var s = fromNeck.getBoundingClientRect();
+    var d = toNeck.getBoundingClientRect();
+    var x1 = s.left + s.width / 2 - w.left, y1 = s.top + s.height / 2 - w.top;
+    var x2 = d.left + d.width / 2 - w.left, y2 = d.bottom - w.top + 8;
+    var p = pigment(level.anim.color);
+    return '<path d="M ' + x1.toFixed(1) + ' ' + y1.toFixed(1) + ' C ' + (x1 + (x2 - x1) * 0.35).toFixed(1) + ' ' + (y1 + 16).toFixed(1) + ', ' +
+      x2.toFixed(1) + ' ' + (y2 - 36).toFixed(1) + ', ' + x2.toFixed(1) + ' ' + y2.toFixed(1) + '" fill="none" stroke="' + p.hex +
+      '" stroke-width="8" stroke-linecap="round" opacity="' + alpha.toFixed(3) + '"/>' +
+      '<circle cx="' + x2.toFixed(1) + '" cy="' + y2.toFixed(1) + '" r="' + (4 + alpha * 3).toFixed(1) + '" fill="' + p.hi + '" opacity="' + alpha.toFixed(3) + '"/>';
+  }
+
+  /* ---------- starting racks ---------- */
+
+  function stopTimers() {
+    cancelAnimationFrame(rafId);
+    window.clearTimeout(shakeTimer);
+    window.clearTimeout(hintTimer);
+    window.clearTimeout(checkTimer);
+  }
+
+  function startCampaign(id, resume) {
+    var def = Core.LEVELS[id - 1];
+    if (!def || id > save.unlocked) return;
+    stopTimers();
+    mode = { kind: 'campaign', id: id };
+    level = newLevel({
+      name: def.name, subtitle: 'Gate ' + id + ' of ' + Core.LEVELS.length, tubes: resume ? resume.tubes : Core.cloneTubes(def.tubes),
+      initial: def.tubes, reveal: def.reveal, par: def.par, colors: Core.countColors(def.tubes),
+      moves: resume ? resume.moves : 0, hints: resume ? resume.hints : 3, undo: resume ? resume.undo : [], coach: id === 1 && !resume && !save.best['1']
+    });
+    screen = 'play';
+    overlay = null;
+    if (!resume) hub.event('level-start', { mode: 'campaign', level: id, par: def.par, colors: level.colors });
+    saveSession();
+    render('vial-0');
+    announce((resume ? 'Resumed ' : '') + def.name + '. Par ' + def.par + '. ' + level.tubes.length + ' vials.');
+    afterMoveChecks();
+  }
+
+  function startEndless(fresh, resume) {
+    if (fresh) {
+      mode = { kind: 'endless', stage: 1, score: 0, stageBase: 0, seed: (Date.now() ^ Math.floor(Math.random() * 1e9)) >>> 0, startedAt: Date.now(), ended: false };
+    }
+    if (mode.kind !== 'endless') return;
+    stopTimers();
+    var rack = Core.generateRack(mode.stage, Core.mulberry32(Core.endlessSeed(mode.seed, mode.stage)));
+    var useResume = resume && resume.tubes;
+    level = newLevel({
+      name: 'Stage ' + mode.stage, subtitle: rack.colors + ' pigments', tubes: useResume ? resume.tubes : rack.tubes, initial: rack.tubes,
+      reveal: rack.reveal, par: rack.par, colors: rack.colors,
+      moves: useResume ? resume.moves : 0, hints: useResume ? resume.hints : 3, undo: useResume ? resume.undo : []
+    });
+    screen = 'play';
+    overlay = null;
+    if (!useResume) hub.event('level-start', { mode: 'endless', level: mode.stage, par: rack.par, colors: rack.colors });
+    saveSession();
+    render('vial-0');
+    announce((resume ? 'Resumed ' : '') + 'Night Pour stage ' + mode.stage + '. Par ' + rack.par + '. ' + level.tubes.length + ' vials.');
+    afterMoveChecks();
+  }
+
+  /* ---------- play ---------- */
+
+  function tapVial(i) {
+    if (!level || level.won || level.anim || i < 0 || i >= level.tubes.length) return;
+    level.cursor = i;
+    var tube = level.tubes[i];
+    if (level.selected == null) {
+      if (!tube.length) { sfx.deny(); shake(i); announce('Vial ' + (i + 1) + ' is empty. Choose a vial with pigment first.'); return; }
+      if (Core.isSealed(tube)) { sfx.deny(); shake(i); announce('Vial ' + (i + 1) + ' is sealed.'); return; }
+      level.selected = i;
+      sfx.select();
+      updateBoard(0);
+      announce('Selected vial ' + (i + 1) + ', ' + pigment(tube[tube.length - 1]).name + '. Choose a target.');
+      return;
+    }
+    if (level.selected === i) {
+      level.selected = null;
+      updateBoard(0);
+      announce('Vial ' + (i + 1) + ' put down.');
+      return;
+    }
+    var mv = Core.legalPour(level.tubes, level.selected, i);
+    if (mv) { pour(mv); return; }
+    // Not a legal target. If it is a valid source, switch the selection to it.
+    var from = level.selected;
+    if (tube.length && !Core.isSealed(tube)) {
+      level.selected = i;
+      sfx.select();
+      shake(i);
+      announce('Vial ' + (from + 1) + ' cannot pour into vial ' + (i + 1) + '. Selected vial ' + (i + 1) + ' instead, ' + pigment(tube[tube.length - 1]).name + '.');
+    } else {
+      sfx.deny();
+      shake(i);
+      announce('That pour will not take. Vial ' + (from + 1) + ' is still selected.');
+    }
+  }
+
+  function pour(mv) {
+    level.undo.push(Core.cloneTubes(level.tubes));
+    if (level.undo.length > Core.MAX_UNDO) level.undo.shift();
+    level.selected = null;
+    level.hint = null;
+    level.coach = false;
+    level.status = null;
+    window.clearTimeout(hintTimer);
+    sfx.pour(mv.color);
+    if (reducedMotion()) { finishPour(mv); return; }
+    var dir = mv.to >= mv.from ? 1 : -1;
+    var a = vialEl(mv.from), b = vialEl(mv.to);
+    if (a && b) {
+      var ra = a.getBoundingClientRect(), rb = b.getBoundingClientRect();
+      dir = rb.left + rb.width / 2 >= ra.left + ra.width / 2 ? 1 : -1;
+    }
+    level.anim = { from: mv.from, to: mv.to, amount: mv.amount, color: mv.color, start: performance.now(), dur: POUR_MS, dir: dir };
+    cancelAnimationFrame(rafId);
+    rafId = requestAnimationFrame(step);
+  }
+  function step(now) {
+    if (!level || !level.anim) return;
+    var t = Math.min(1, (now - level.anim.start) / level.anim.dur);
+    updateBoard(t);
+    if (t >= 1) {
+      var a = level.anim;
+      level.anim = null;
+      finishPour(a);
+    } else rafId = requestAnimationFrame(step);
+  }
+  function finishPour(mv) {
+    level.tubes = Core.applyPour(level.tubes, mv);
+    level.moves += 1;
+    level.anim = null;
+    var dst = level.tubes[mv.to];
+    var msg = 'Poured ' + mv.amount + ' ' + pigment(mv.color).name + ' from vial ' + (mv.from + 1) + ' to vial ' + (mv.to + 1) + '. Move ' + level.moves + '.';
+    if (Core.isSealed(dst)) { sfx.seal(); msg += ' ' + pigment(dst[0]).name + ' sealed.'; }
+    if (Core.isSolved(level.tubes)) { win(); return; }
+    saveSession();
+    updateBoard(0);
+    announce(msg);
+    afterMoveChecks();
+  }
+
+  /* Tell the player when the rack is stuck (no legal pour) or provably dead. */
+  function afterMoveChecks() {
+    if (!level || level.won) return;
+    window.clearTimeout(checkTimer);
+    if (Core.isStuck(level.tubes)) {
+      level.status = 'stuck';
+      updateBoard(0);
+      announce('No pours left. Undo or restart.');
+      return;
+    }
+    var snapshot = level.tubes;
+    checkTimer = window.setTimeout(function () {
+      if (!level || level.tubes !== snapshot || level.won) return;
+      if (Core.solve(level.tubes, 4000).status === 'unsolvable') {
+        level.status = 'dead';
+        updateBoard(0);
+        announce('This rack can no longer be sealed. Undo or restart.');
+      }
+    }, 60);
+  }
+
+  function win() {
+    level.won = true;
+    level.selected = null;
+    level.status = null;
+    stopTimers();
+    var stars = Core.starsFor(level.moves, level.par);
+    if (mode.kind === 'campaign') {
+      var gained = Core.levelScore(level.moves, level.par, stars);
+      var key = String(mode.id);
+      var prev = save.best[key];
+      var improved = !prev || stars > prev.stars || (stars === prev.stars && level.moves < prev.moves);
+      if (improved) save.best[key] = { moves: level.moves, stars: stars, score: gained };
+      if (mode.id === save.unlocked && mode.id < Core.LEVELS.length) save.unlocked = mode.id + 1;
+      persist();
+      clearSession();
+      level.result = { stars: stars, score: save.best[key].score, gained: gained, improved: improved, bestMoves: save.best[key].moves };
+      var total = Core.totalScore(save);
+      hub.event('level-complete', { mode: 'campaign', level: mode.id, moves: level.moves, stars: stars, par: level.par, levelScore: gained, score: total });
+      hub.score(total);
+      if (mode.id === Core.LEVELS.length) {
+        hub.event('campaign-complete', { score: total, stars: Core.totalStars(save) });
+        hub.gameOver(total);
+      }
+    } else {
+      var gain = Core.stageScore(mode.stage, level.moves, level.par, stars);
+      mode.score = mode.stageBase + gain;
+      var better = mode.score > save.endlessBest;
+      if (better) { save.endlessBest = mode.score; persist(); }
+      level.result = { stars: stars, score: mode.score, gained: gain, improved: better, bestMoves: level.moves };
+      saveSession();
+      hub.event('level-complete', { mode: 'endless', level: mode.stage, moves: level.moves, stars: stars, par: level.par, levelScore: gain, score: mode.score });
+      hub.score(mode.score);
+    }
+    sfx.win();
+    render();
+    announce('Sealed in ' + level.moves + ' moves. ' + stars + ' of 3 seals.');
+  }
+
+  function undo() {
+    if (!level || level.anim || level.won || !level.undo.length) return;
+    level.tubes = level.undo.pop();
+    level.moves = Math.max(0, level.moves - 1);
+    level.selected = null;
+    level.hint = null;
+    level.status = null;
+    sfx.click();
+    saveSession();
+    updateBoard(0);
+    announce('Undid the last pour. Move ' + level.moves + '.');
+    afterMoveChecks();
+  }
+
+  function restart() {
+    if (!level || level.anim) return;
+    if (mode.kind === 'endless' && level.won) { replay(); return; }
+    if (level.won) { startCampaign(mode.id); return; }
+    level.tubes = Core.cloneTubes(level.initial);
+    level.moves = 0;
+    level.undo = [];
+    level.selected = null;
+    level.hint = null;
+    level.hints = 3;
+    level.status = null;
+    level.cursor = 0;
+    overlay = null;
+    sfx.click();
+    saveSession();
+    render('vial-0');
+    announce('Rack restarted.');
+    afterMoveChecks();
+  }
+
+  function useHint() {
+    if (!level || level.anim || level.won || level.hints <= 0) return;
+    var h = Core.findHint(level.tubes, 20000);
+    if (!h) { sfx.deny(); level.status = 'stuck'; updateBoard(0); announce('No pours left. Undo or restart.'); return; }
+    if (h.unsolvable) { sfx.deny(); level.status = 'dead'; updateBoard(0); announce('This rack can no longer be sealed. Undo or restart. No hint spent.'); return; }
+    level.hints -= 1;
+    level.hint = { from: h.move.from, to: h.move.to };
+    level.selected = null;
+    level.cursor = h.move.from;
+    hub.event('hint-used', { mode: mode.kind, level: mode.kind === 'campaign' ? mode.id : mode.stage, hintsLeft: level.hints });
+    sfx.select();
+    saveSession();
+    updateBoard(0);
+    announce('Hint: pour vial ' + (h.move.from + 1) + ' into vial ' + (h.move.to + 1) + '. ' + level.hints + ' hints left.');
+    var mark = level.hint;
+    window.clearTimeout(hintTimer);
+    hintTimer = window.setTimeout(function () {
+      if (level && level.hint === mark) { level.hint = null; if (!level.anim) updateBoard(0); }
+    }, 2600);
+  }
+
+  function shake(i) {
+    level.shake = i;
+    updateBoard(0);
+    window.clearTimeout(shakeTimer);
+    shakeTimer = window.setTimeout(function () {
+      if (level) { level.shake = null; if (!level.anim) updateBoard(0); }
+    }, 380);
+  }
+
+  function toggleSound() {
+    save.sound = !save.sound;
+    setMuted(!save.sound);
+    persist();
+    if (save.sound) { unlockAudio(); sfx.click(); }
+    render();
+    announce(save.sound ? 'Sound on.' : 'Sound off.');
+  }
+
+  function endRun() {
+    if (mode.kind !== 'endless' || mode.ended) return;
+    mode.ended = true;
+    var stages = level && level.won ? mode.stage : mode.stage - 1;
+    hub.event('run-end', { score: mode.score, stages: stages, best: save.endlessBest, durationMs: Date.now() - mode.startedAt });
+    hub.gameOver(mode.score, Date.now() - mode.startedAt);
+  }
+
+  function leave() {
+    stopTimers();
+    clearSession();
+    if (mode.kind === 'endless') { endRun(); screen = 'menu'; }
+    else screen = 'select';
+    var from = mode.kind === 'campaign' ? 'gate-' + mode.id : 'endless';
+    overlay = null;
+    level = null;
+    render(from);
+    announce(screen === 'menu' ? 'Run ended.' : 'Gate list.');
+  }
+
+  function next() {
+    if (!level || !level.won) return;
+    if (mode.kind === 'campaign') {
+      if (mode.id >= Core.LEVELS.length) { leave(); return; }
+      startCampaign(mode.id + 1);
+    } else {
+      mode.stage += 1;
+      mode.stageBase = mode.score;
+      startEndless(false);
+    }
+  }
+  function replay() {
+    if (mode.kind === 'endless') {
+      mode.score = mode.stageBase;   // replaying a stage does not bank its score twice
+      startEndless(false);
+    } else startCampaign(mode.id);
+  }
+
+  function openPause() {
+    if (!level || level.won || screen !== 'play') return;
+    overlay = 'pause';
+    render();
+  }
+
+  /* ---------- input ---------- */
+
+  function onClick(e) {
+    var el = e.target && e.target.closest ? e.target.closest('[data-act]') : null;
+    if (!el || el.disabled || !rootEl.contains(el)) return;
+    unlockAudio();
+    var act = el.getAttribute('data-act');
+    switch (act) {
+      case 'campaign': sfx.click(); screen = 'select'; overlay = null; render('gate-' + save.unlocked); announce('Gate list.'); break;
+      case 'endless': sfx.click(); startEndless(true); break;
+      case 'help': helpFromPause = overlay === 'pause'; overlay = 'help'; render(); break;
+      case 'close-help': closeHelp(); break;
+      case 'sound': toggleSound(); break;
+      case 'menu': screen = 'menu'; overlay = null; render('campaign'); break;
+      case 'gate': startCampaign(Number(el.getAttribute('data-i'))); break;
+      case 'vial': tapVial(Number(el.getAttribute('data-i'))); break;
+      case 'undo': undo(); break;
+      case 'restart': restart(); break;
+      case 'hint': useHint(); break;
+      case 'pause': openPause(); break;
+      case 'resume': overlay = null; render(); break;
+      case 'back': if (mode.kind === 'endless') openPause(); else leave(); break;
+      case 'quit': leave(); break;
+      case 'next': next(); break;
+      case 'replay': replay(); break;
+    }
+  }
+  function closeHelp() {
+    overlay = helpFromPause && screen === 'play' ? 'pause' : null;
+    helpFromPause = false;
+    if (!save.seenHelp) { save.seenHelp = true; persist(); }
+    render();
+  }
+
+  function columns() {
+    var b = boardEl();
+    var c = b ? parseInt(b.style.getPropertyValue('--cols'), 10) : 0;
+    return c > 0 ? c : 4;
+  }
+  function moveCursor(to) {
+    level.cursor = (to + level.tubes.length) % level.tubes.length;
+    if (!level.anim) updateBoard(0);
+    var v = vialEl(level.cursor);
+    if (v) v.focus({ preventScroll: false });
+  }
+
+  function onKey(e) {
+    if (e.ctrlKey || e.metaKey || e.altKey) return;
+    unlockAudio();
+    var k = e.key;
+    var onButton = !!(e.target && e.target.closest && e.target.closest('button'));
+    if (k === 'Escape') {
+      e.preventDefault();
+      if (overlay === 'help') closeHelp();
+      else if (screen === 'play' && level && level.won) leave();
+      else if (overlay === 'pause') { overlay = null; render(); }
+      else if (screen === 'play' && level && level.selected != null) { level.selected = null; updateBoard(0); announce('Selection cleared.'); }
+      else if (screen === 'play') openPause();
+      else if (screen === 'select') { screen = 'menu'; render('campaign'); }
+      return;
+    }
+    if (k === 'm' || k === 'M') { toggleSound(); return; }
+    if (overlay || (screen === 'play' && level && level.won)) {
+      if (k === 'Enter' && !onButton && level && level.won) { e.preventDefault(); next(); }
+      return;
+    }
+    if (screen !== 'play' || !level) return;
+    if (k === 'ArrowRight' || k === 'ArrowLeft' || k === 'ArrowDown' || k === 'ArrowUp' || k === 'Home' || k === 'End') {
+      e.preventDefault();
+      var c = columns();
+      var to = k === 'ArrowRight' ? level.cursor + 1 : k === 'ArrowLeft' ? level.cursor - 1 :
+        k === 'ArrowDown' ? Math.min(level.tubes.length - 1, level.cursor + c) : k === 'ArrowUp' ? Math.max(0, level.cursor - c) :
+        k === 'Home' ? 0 : level.tubes.length - 1;
+      moveCursor(to);
+      return;
+    }
+    if (/^[0-9]$/.test(k)) {
+      var idx = k === '0' ? 9 : Number(k) - 1;
+      if (idx < level.tubes.length) { e.preventDefault(); moveCursor(idx); tapVial(idx); }
+      return;
+    }
+    if ((k === 'Enter' || k === ' ') && !onButton) {
+      e.preventDefault();
+      var v = vialEl(level.cursor);
+      if (v) v.focus({ preventScroll: true });
+      tapVial(level.cursor);
+      return;
+    }
+    if (k === 'u' || k === 'U') undo();
+    else if (k === 'h' || k === 'H') useHint();
+    else if (k === 'r' || k === 'R') restart();
+    else if (k === 'p' || k === 'P') openPause();
+  }
+
+  rootEl.addEventListener('click', onClick);
+  rootEl.addEventListener('pointerdown', unlockAudio);
+  window.addEventListener('keydown', onKey);
+  window.addEventListener('resize', function () { if (screen === 'play' && level) layoutBoard(); });
+  document.addEventListener('visibilitychange', function () {
+    if (!actx) return;
+    try {
+      if (document.visibilityState === 'hidden') actx.suspend();
+      else if (save.sound) actx.resume();
+    } catch (err) { /* ignore */ }
+  });
+
+  // Read-only hook for the smoke test and for debugging. Play goes through real input.
+  window.__rokumon = {
+    get screen() { return screen; },
+    get overlay() { return overlay; },
+    get tubes() { return level ? Core.cloneTubes(level.tubes) : null; },
+    get moves() { return level ? level.moves : 0; },
+    get won() { return level ? level.won : false; },
+    get status() { return level ? level.status : null; },
+    get mode() { return mode.kind; },
+    get runScore() { return mode.kind === 'endless' ? mode.score : 0; },
+    get busy() { return !!(level && level.anim); }
+  };
+
+  /* ---------- boot ---------- */
+
+  var resumed = Core.sanitizeSession(readJSON(Core.SESSION_KEY), save);
+  if (!resumed) clearSession();
+  hub.ready();
+  if (resumed && resumed.kind === 'campaign') {
+    startCampaign(resumed.id, resumed);
+  } else if (resumed && resumed.kind === 'endless') {
+    mode = { kind: 'endless', stage: resumed.stage, score: resumed.score, stageBase: resumed.stageBase, seed: resumed.seed, startedAt: resumed.startedAt, ended: false };
+    startEndless(false, resumed.tubes ? resumed : null);
+  } else {
+    render();
+    if (overlay === 'help') announce('How to pour is open.');
+  }
+})();
 </script>
 </body>
 </html>

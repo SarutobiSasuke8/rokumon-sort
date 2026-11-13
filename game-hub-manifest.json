@@ -4,24 +4,32 @@
   "title": "Rokumon Sort",
   "name": "Rokumon Sort",
   "description": "Pour forge pigments into crystal vials until every tube is a single sealed colour.",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "entry": "index.html",
   "category": "puzzle",
   "genre": "colour-sort",
   "players": 1,
   "orientation": "portrait",
   "offline": true,
+  "controls": ["touch", "mouse", "keyboard"],
   "modes": ["campaign", "endless"],
   "scoring": {
     "direction": "higher",
     "campaign": "Sum of best level scores. Each clear is stars × 500 plus a par bonus.",
     "endless": "Cumulative Night Pour run score. Higher is better."
   },
-  "events": ["ready", "level_start", "level_complete", "endless_stage", "hint_used", "game_over"],
-  "hub": {
-    "ready": "Hub.ready",
-    "score": "Hub.score",
-    "event": "Hub.event",
-    "gameOver": "Hub.gameOver"
+  "bridge": {
+    "version": 1,
+    "transport": "window.Hub when present, otherwise postMessage to the parent frame with targetOrigin set to the game's own origin. Nothing is sent when the game is not framed.",
+    "capabilities": ["score", "event"],
+    "score": "Hub.score(number) after every clear: the campaign total or the current Night Pour run score.",
+    "gameOver": "Hub.gameOver(number, durationMs?) when gate 20 is cleared and when a Night Pour run ends.",
+    "events": {
+      "level-start": { "mode": "string", "level": "number", "par": "number", "colors": "number" },
+      "level-complete": { "mode": "string", "level": "number", "moves": "number", "stars": "number", "par": "number", "levelScore": "number", "score": "number" },
+      "hint-used": { "mode": "string", "level": "number", "hintsLeft": "number" },
+      "campaign-complete": { "score": "number", "stars": "number" },
+      "run-end": { "score": "number", "stages": "number", "best": "number", "durationMs": "number" }
+    }
   }
 }

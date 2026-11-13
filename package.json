@@ -1,0 +1,15 @@
+{
+  "name": "rokumon-sort-dev",
+  "private": true,
+  "description": "Dev-only checks for Rokumon Sort. Not needed to play: the game is index.html.",
+  "scripts": {
+    "test": "node --test \"test/*.test.js\"",
+    "smoke": "node test-smoke/smoke.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "devDependencies": {
+    "playwright": "1.64.0"
+  }
+}
